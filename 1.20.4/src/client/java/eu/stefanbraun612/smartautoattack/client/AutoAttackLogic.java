@@ -182,12 +182,16 @@ public class AutoAttackLogic {
 			return true; // item has no durability (e.g. bare hand, unbreakable tool)
 		}
 		int remaining = maxDamage - stack.getDamage();
-		if (config.minDurability > 0 && remaining < config.minDurability) {
+		// <= (not <): minDurability/minDurabilityPercent represent uses left to
+		// preserve, so the guard must trip *at* the threshold, before that last
+		// use is spent - otherwise the weapon consumes its final durability
+		// point and breaks despite the configured floor.
+		if (config.minDurability > 0 && remaining <= config.minDurability) {
 			return false;
 		}
 		if (config.minDurabilityPercent > 0) {
 			float percent = (remaining * 100f) / maxDamage;
-			if (percent < config.minDurabilityPercent) {
+			if (percent <= config.minDurabilityPercent) {
 				return false;
 			}
 		}
