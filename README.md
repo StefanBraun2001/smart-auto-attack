@@ -4,10 +4,26 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.3** (alpha, tested), built separately for **MC 1.20.4**
+Current build: **A0.3H2_AP** (alpha, tested), built separately for **MC 1.20.4**
 (`1.20.4/`) and **MC 26.2** (`26.2/`) - same features and config schema on
 both. Grab built jars from the [Releases](../../releases) page, or build
 from source with `./gradlew build` inside either version folder.
+
+## This is the "uncensored" branch
+
+This branch is a **permanent variant, GitHub-only, never uploaded to
+Modrinth.** The [`master` branch](../../tree/master) hardcodes an
+unconditional exclusion so the mod can never target players, required by
+Modrinth Content Rules 3.3d ("automatic or assisted PvP combat" needs a
+server-side opt-in this mod doesn't implement). This branch deliberately
+omits that exclusion - targeting is governed purely by blacklist/whitelist,
+same as before A0.3H2.
+
+**Use this at your own risk on multiplayer servers.** Automated combat
+against other players is very likely to violate a typical server's rules
+and get flagged by anti-cheat, regardless of what the mod is called or
+which build you're running. This is fine for singleplayer; for multiplayer,
+only use it on servers you own or have explicit permission on.
 
 ## Install
 
@@ -23,7 +39,7 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - Night-only mode (with Nether/End and duration-freeze options).
 - Stop conditions: max hits, max duration, min durability (absolute/%),
   hunger safety stop.
-- Entity blacklist/whitelist.
+- Entity blacklist/whitelist (players targetable - see "uncensored branch" note above).
 - Auto-eat with a configurable hunger threshold and food-safety presets.
 - Auto-stop sound feedback.
 
