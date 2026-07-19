@@ -166,6 +166,17 @@ public class AutoAttackLogic {
 			return null;
 		}
 		Entity target = ((EntityHitResult) client.crosshairTarget).getEntity();
+		// Hardcoded, not configurable, and checked unconditionally - deliberately
+		// outside the requireTargetDetected branch below, since that branch is
+		// skipped entirely in "blind swing" mode (requireTargetDetected off) and
+		// would otherwise let a player slip through unfiltered. Required for
+		// Modrinth Content Rules 3.3d (automatic/assisted PvP combat needs a
+		// server-side opt-in, which this mod does not implement) - see the
+		// separate "_AP" ("attacks players") build on GitHub only for anyone who
+		// wants this removed at their own risk.
+		if (target instanceof PlayerEntity) {
+			return null;
+		}
 		if (config.requireTargetDetected && !passesFilter(target, config)) {
 			return null;
 		}
