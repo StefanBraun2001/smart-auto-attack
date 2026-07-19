@@ -4,10 +4,14 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.3** (alpha, tested), built separately for **MC 1.20.4**
+Current build: **A0.3H2** (alpha, tested), built separately for **MC 1.20.4**
 (`1.20.4/`) and **MC 26.2** (`26.2/`) - same features and config schema on
 both. Grab built jars from the [Releases](../../releases) page, or build
 from source with `./gradlew build` inside either version folder.
+
+**This mod cannot attack players** (see "Player targeting" below) - that's
+a Modrinth Content Rules requirement, not a design choice, and it's not
+configurable in this build.
 
 ## Install
 
@@ -23,12 +27,28 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - Night-only mode (with Nether/End and duration-freeze options).
 - Stop conditions: max hits, max duration, min durability (absolute/%),
   hunger safety stop.
-- Entity blacklist/whitelist.
+- Entity blacklist/whitelist (players excluded unconditionally - see below).
 - Auto-eat with a configurable hunger threshold and food-safety presets.
 - Auto-stop sound feedback.
 
 Full feature/config documentation lives in the bundled README shipped
 alongside the jars.
+
+## Player targeting
+
+As of A0.3H2, this mod cannot attack players under any configuration -
+the exclusion is hardcoded and checked unconditionally (including in
+blind-swing mode, where blacklist/whitelist would otherwise be bypassed
+entirely). This is required by Modrinth Content Rules 3.3d ("automatic or
+assisted PvP combat" needs a genuine server-side opt-in, which this project
+doesn't implement).
+
+An **uncensored** variant without this restriction is maintained on the
+[`uncensored` branch](../../tree/uncensored) and released only as GitHub
+Releases tagged `_AP` ("attacks players") - never uploaded to Modrinth.
+Use it only on servers you own or have explicit permission on; automated
+combat against other players is very likely to violate a typical server's
+rules and get flagged by anti-cheat regardless of what the mod is called.
 
 ## Building from source
 
