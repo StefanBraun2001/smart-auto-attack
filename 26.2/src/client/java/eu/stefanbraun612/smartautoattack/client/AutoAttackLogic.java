@@ -166,17 +166,10 @@ public class AutoAttackLogic {
 			return null;
 		}
 		Entity target = ((EntityHitResult) client.hitResult).getEntity();
-		// Hardcoded, not configurable, and checked unconditionally - deliberately
-		// outside the requireTargetDetected branch below, since that branch is
-		// skipped entirely in "blind swing" mode (requireTargetDetected off) and
-		// would otherwise let a player slip through unfiltered. Required for
-		// Modrinth Content Rules 3.3d (automatic/assisted PvP combat needs a
-		// server-side opt-in, which this mod does not implement) - see the
-		// separate "_AP" ("attacks players") build on GitHub only for anyone who
-		// wants this removed at their own risk.
-		if (target instanceof Player) {
-			return null;
-		}
+		// UNCENSORED BUILD ("_AP" - "attacks players"): unlike the Modrinth-distributed
+		// build, this branch does NOT hardcode a player exclusion here - blacklist/
+		// whitelist fully governs targeting, same as pre-A0.3H2. GitHub-only distribution;
+		// never upload builds from this branch to Modrinth (Content Rules 3.3d).
 		if (config.requireTargetDetected && !passesFilter(target, config)) {
 			return null;
 		}
