@@ -10,9 +10,11 @@ public class AttackPreset {
 	public int maxHits = 0;
 	public int minDurability = 0;
 	public int minDurabilityPercent = 0;
+	public boolean nightOnly = false;
+	public boolean skipNightCheckInDimensionsWithoutCycle = false;
+	public boolean freezeDurationDuringDay = false;
 	public boolean autoEatEnabled = true;
 	public int autoEatHungerThreshold = 20;
-	public SmartAutoAttackConfig.FoodSafetyPreset foodSafetyPreset = SmartAutoAttackConfig.FoodSafetyPreset.LIGHT;
 	public boolean hungerSafetyStopEnabled = true;
 	public int hungerSafetyStopThreshold = 6;
 
@@ -22,9 +24,11 @@ public class AttackPreset {
 		preset.maxHits = config.maxHits;
 		preset.minDurability = config.minDurability;
 		preset.minDurabilityPercent = config.minDurabilityPercent;
+		preset.nightOnly = config.nightOnly;
+		preset.skipNightCheckInDimensionsWithoutCycle = config.skipNightCheckInDimensionsWithoutCycle;
+		preset.freezeDurationDuringDay = config.freezeDurationDuringDay;
 		preset.autoEatEnabled = config.autoEatEnabled;
 		preset.autoEatHungerThreshold = config.autoEatHungerThreshold;
-		preset.foodSafetyPreset = config.foodSafetyPreset;
 		preset.hungerSafetyStopEnabled = config.hungerSafetyStopEnabled;
 		preset.hungerSafetyStopThreshold = config.hungerSafetyStopThreshold;
 		return preset;
@@ -35,23 +39,36 @@ public class AttackPreset {
 		config.maxHits = maxHits;
 		config.minDurability = minDurability;
 		config.minDurabilityPercent = minDurabilityPercent;
+		config.nightOnly = nightOnly;
+		config.skipNightCheckInDimensionsWithoutCycle = skipNightCheckInDimensionsWithoutCycle;
+		config.freezeDurationDuringDay = freezeDurationDuringDay;
 		config.autoEatEnabled = autoEatEnabled;
 		config.autoEatHungerThreshold = autoEatHungerThreshold;
-		config.foodSafetyPreset = foodSafetyPreset;
 		config.hungerSafetyStopEnabled = hungerSafetyStopEnabled;
 		config.hungerSafetyStopThreshold = hungerSafetyStopThreshold;
 	}
 
-	// Ships as a starting example - night-only and the auto-eat hotbar slot are
-	// deliberately left for the player to set manually alongside applying this.
-	public static AttackPreset creakingTpAehp() {
+	public static AttackPreset regularTpAehp() {
 		AttackPreset preset = new AttackPreset();
-		preset.minDurability = 30;
+		preset.minDurability = 10;
+		preset.minDurabilityPercent = 5;
 		preset.autoEatEnabled = true;
-		preset.autoEatHungerThreshold = 4;
-		preset.foodSafetyPreset = SmartAutoAttackConfig.FoodSafetyPreset.LIGHT;
+		preset.autoEatHungerThreshold = 7;
 		preset.hungerSafetyStopEnabled = true;
-		preset.hungerSafetyStopThreshold = 2;
+		preset.hungerSafetyStopThreshold = 3;
+		return preset;
+	}
+
+	public static AttackPreset creakingFtTpAehp() {
+		AttackPreset preset = new AttackPreset();
+		preset.minDurability = 10;
+		preset.minDurabilityPercent = 5;
+		preset.nightOnly = true;
+		preset.freezeDurationDuringDay = true;
+		preset.autoEatEnabled = true;
+		preset.autoEatHungerThreshold = 7;
+		preset.hungerSafetyStopEnabled = true;
+		preset.hungerSafetyStopThreshold = 3;
 		return preset;
 	}
 }

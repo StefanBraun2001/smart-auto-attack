@@ -1,5 +1,5 @@
 {
-	"key.categories.smartautoattack": "Smart Auto Attack",
+	"key.categories.smartautoattack.main": "Smart Auto Attack",
 	"key.smartautoattack.toggle": "Toggle Auto Attack",
 
 	"text.autoconfig.smartautoattack.title": "Smart Auto Attack",
@@ -52,6 +52,12 @@
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold": "Hunger safety threshold",
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold.@Tooltip": "Stop when hunger drops below this value, on the vanilla 0-20 hunger scale (20 = full, each drumstick icon = 2 points). Only used while Hunger safety stop above is on.",
 
+	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled": "Health safety stop",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your health drops below the threshold below, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). A safety net independent of everything else. Turn off if you don't want any health-based behavior at all.",
+
+	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold": "Health safety threshold",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold.@Tooltip": "Stop when health drops below this value, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). Only used while Health safety stop above is on.",
+
 	"text.autoconfig.smartautoattack.option.filterMode": "Target filter mode",
 	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except entities in the list below. WHITELIST: only attack entities in the list below.",
 
@@ -66,6 +72,12 @@
 
 	"text.autoconfig.smartautoattack.option.autoStopSound": "Auto-stop sound",
 	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Full sound event ID to play on auto-stop, e.g. minecraft:block.bell.use, minecraft:entity.experience_orb.pickup, minecraft:entity.villager.no. Invalid/unknown IDs simply play nothing.",
+
+	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect": "Resume after manual reconnect",
+	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect.@Tooltip": "Off (default): if you reconnect yourself (not via the separate Smart Auto Reconnect mod), the mod turns itself off rather than silently resuming. On: it stays on and resumes after a short settle buffer, same as a scripted reconnect always does regardless of this setting.",
+
+	"text.autoconfig.smartautoattack.option.autoEatEnabled": "Auto-eat enabled",
+	"text.autoconfig.smartautoattack.option.autoEatEnabled.@Tooltip": "On (default): auto-eat is active whenever the hotbar slot below is set. Off: auto-eat never triggers, regardless of the hotbar slot - a quick way to disable eating without losing your configured slot/threshold.",
 
 	"text.autoconfig.smartautoattack.option.autoEatSlot": "Auto-eat hotbar slot (0 = off)",
 	"text.autoconfig.smartautoattack.option.autoEatSlot.@Tooltip": "Hotbar slot (1-9) holding your food item. 0 disables auto-eat.",
