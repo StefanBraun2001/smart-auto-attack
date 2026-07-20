@@ -4,10 +4,10 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.3H2_AP** (alpha, tested), built separately for **MC 1.20.4**
-(`1.20.4/`) and **MC 26.2** (`26.2/`) - same features and config schema on
-both. Grab built jars from the [Releases](../../releases) page, or build
-from source with `./gradlew build` inside either version folder.
+Current build: **A0.4_AP** (alpha, tested), **MC 26.2 only** (1.20.4 support
+was dropped as of A0.4, same as the `master` branch). Grab a built jar from
+the [Releases](../../releases) page, or build from source with
+`./gradlew build` inside `26.2/`.
 
 ## This is the "uncensored" branch
 
@@ -17,7 +17,9 @@ unconditional exclusion so the mod can never target players, required by
 Modrinth Content Rules 3.3d ("automatic or assisted PvP combat" needs a
 server-side opt-in this mod doesn't implement). This branch deliberately
 omits that exclusion - targeting is governed purely by blacklist/whitelist,
-same as before A0.3H2.
+same as before A0.3H2. All other feature work is kept in sync with `master`
+(cherry-picked over as it lands) - this branch only ever diverges on that
+one exclusion.
 
 **Use this at your own risk on multiplayer servers.** Automated combat
 against other players is very likely to violate a typical server's rules
@@ -38,9 +40,19 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
   discharged hits.
 - Night-only mode (with Nether/End and duration-freeze options).
 - Stop conditions: max hits, max duration, min durability (absolute/%),
-  hunger safety stop.
-- Entity blacklist/whitelist (players targetable - see "uncensored branch" note above).
+  hunger safety stop, health safety stop.
+- Entity blacklist/whitelist (players targetable - see "uncensored branch"
+  note above).
 - Auto-eat with a configurable hunger threshold and food-safety presets.
+- **Presets**: named bundles of duration/durability/night-only/auto-eat
+  settings, managed via client-side commands
+  (`/smartautoattack preset list|apply|save|delete`). Ships with
+  `Regular_TP_AEHP` and `Creaking_FT_TP_AEHP` - see the bundled README for
+  what each one sets.
+- Auto-resumes after a reconnect handled by the separate
+  [Smart Auto Reconnect](https://github.com/StefanBraun2001/smart-auto-reconnect)
+  mod; optional "resume after manual reconnect" toggle for reconnects you
+  initiate yourself.
 - Auto-stop sound feedback.
 
 Full feature/config documentation lives in the bundled README shipped
@@ -48,15 +60,12 @@ alongside the jars.
 
 ## Building from source
 
-Each version folder is a self-contained Gradle/Loom project:
-
 ```
-cd 1.20.4   # or 26.2
+cd 26.2
 ./gradlew build
 ```
 
-Built jar lands in `build/libs/`. 1.20.4 needs JDK 21 to run Gradle/Loom
-(compiles to Java 17); 26.2 needs JDK 25.
+Built jar lands in `26.2/build/libs/`. Needs JDK 25.
 
 ## Credits
 
