@@ -70,6 +70,11 @@ public class AutoAttackLogic {
 			return;
 		}
 
+		if (!passesHealthSafety(player, config)) {
+			stop(client, config, "Smart Auto Attack: stopped (health too low)");
+			return;
+		}
+
 		long maxDurationTicks = DurationParser.parseTicks(config.maxDuration);
 		if (maxDurationTicks > 0 && elapsedActiveTicks >= maxDurationTicks) {
 			stop(client, config, "Smart Auto Attack: stopped (time limit reached)");
@@ -214,6 +219,13 @@ public class AutoAttackLogic {
 			return true;
 		}
 		return player.getFoodData().getFoodLevel() >= config.hungerSafetyStopThreshold;
+	}
+
+	private static boolean passesHealthSafety(Player player, SmartAutoAttackConfig config) {
+		if (!config.healthSafetyStopEnabled) {
+			return true;
+		}
+		return player.getHealth() >= config.healthSafetyStopThreshold;
 	}
 
 	private static boolean passesFilter(Entity target, SmartAutoAttackConfig config) {
