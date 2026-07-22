@@ -46,6 +46,12 @@
 	"text.autoconfig.smartautoattack.option.minDurabilityPercent": "Min durability % (0 = disabled)",
 	"text.autoconfig.smartautoattack.option.minDurabilityPercent.@Tooltip": "Stop before the main-hand item's remaining durability drops below this percentage.",
 
+	"text.autoconfig.smartautoattack.option.useMoreTools": "Use more tools",
+	"text.autoconfig.smartautoattack.option.useMoreTools.@Tooltip": "Off (default): stop as soon as the current weapon's durability guard triggers. On: instead, look for another matching weapon (see Tool keyword below) elsewhere in your hotbar and switch to it, only stopping once none are left with enough durability.",
+
+	"text.autoconfig.smartautoattack.option.toolKeyword": "Tool keyword",
+	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "Used when Use more tools is on. Substring match (case-insensitive) against the weapon's item ID, e.g. 'sword' matches minecraft:diamond_sword, minecraft:netherite_sword, etc.",
+
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled": "Hunger safety stop",
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your hunger drops below the threshold below, independent of the auto-eat feature. A safety net for hardcore/no-food-on-hand situations. Turn off if you don't want any hunger-based behavior at all (e.g. servers where you regenerate via a beacon and don't care about hunger).",
 
@@ -68,7 +74,7 @@
 	"text.autoconfig.smartautoattack.option.feedbackMode.@Tooltip": "How to notify you when auto-attack toggles or auto-stops.",
 
 	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop": "Play sound on auto-stop",
-	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop.@Tooltip": "On (default): play the sound below whenever the mod stops itself (durability, hunger safety, hit limit, time limit). Does not play when you manually toggle it off yourself.",
+	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop.@Tooltip": "On (default): play the sound below whenever the mod stops itself (durability/no usable weapon left, hunger safety, hit limit, time limit). Does not play when you manually toggle it off yourself.",
 
 	"text.autoconfig.smartautoattack.option.autoStopSound": "Auto-stop sound",
 	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Full sound event ID to play on auto-stop, e.g. minecraft:block.bell.use, minecraft:entity.experience_orb.pickup, minecraft:entity.villager.no. Invalid/unknown IDs simply play nothing.",

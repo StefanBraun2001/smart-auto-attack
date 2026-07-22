@@ -72,6 +72,12 @@ public class SmartAutoAttackConfig implements ConfigData {
 	public int minDurabilityPercent = 0; // 0 = disabled
 
 	@ConfigEntry.Gui.Tooltip
+	public boolean useMoreTools = false;
+
+	@ConfigEntry.Gui.Tooltip
+	public String toolKeyword = "sword"; // substring match against the item's registry ID
+
+	@ConfigEntry.Gui.Tooltip
 	public boolean hungerSafetyStopEnabled = true;
 
 	@ConfigEntry.Gui.Tooltip

@@ -62,6 +62,8 @@ public class PresetManager {
 		}
 		result.putIfAbsent("Regular_TP_AEHP", AttackPreset.regularTpAehp());
 		result.putIfAbsent("Creaking_FT_TP_AEHP", AttackPreset.creakingFtTpAehp());
+		result.putIfAbsent("Regular_MT_TP_AEHP", AttackPreset.regularMtTpAehp());
+		result.putIfAbsent("Creaking_MT_FT_TP_AEHP", AttackPreset.creakingMtFtTpAehp());
 		return result;
 	}
 
