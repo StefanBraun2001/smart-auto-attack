@@ -26,7 +26,7 @@
 	"text.autoconfig.smartautoattack.option.alwaysFullyCharge.@Tooltip": "Only matters for FIXED_INTERVAL/RANDOM_INTERVAL cadence (DEFAULT always waits for full charge regardless). On (default): also wait for the vanilla attack cooldown to reach 100% before swinging, even if your configured interval elapsed first - prevents weak/discharged hits from an interval shorter than your weapon's real cooldown. Off: attacks strictly on your configured interval regardless of charge, which can produce reduced-damage hits if the interval is shorter than the weapon's cooldown.",
 
 	"text.autoconfig.smartautoattack.option.nightOnly": "Night only",
-	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack while it is night (time 13000-23000). Useful for AFK-farming creakings.",
+	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack during the Creaking Heart's actual awake window (time 12600-23400, per the Minecraft Wiki), not the generic 13000-23000 night range. Useful for AFK-farming creakings. Sends a feedback message whenever this pauses/resumes attacking.",
 
 	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle": "Ignore night-only in Nether/End",
 	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle.@Tooltip": "Off (default): Night only still applies everywhere, using the shared world-time clock even though the Nether/End have no visible day-night cycle. On: while Night only is enabled, always allow attacking in the Nether and the End (only the Overworld - or any other dimension with a real day-night cycle - still requires night).",
@@ -46,11 +46,23 @@
 	"text.autoconfig.smartautoattack.option.minDurabilityPercent": "Min durability % (0 = disabled)",
 	"text.autoconfig.smartautoattack.option.minDurabilityPercent.@Tooltip": "Stop before the main-hand item's remaining durability drops below this percentage.",
 
+	"text.autoconfig.smartautoattack.option.useMoreTools": "Use more tools",
+	"text.autoconfig.smartautoattack.option.useMoreTools.@Tooltip": "Off (default): stop as soon as the current weapon's durability guard triggers. On: instead, look for another matching weapon (see Tool keyword below) elsewhere in your hotbar and switch to it, only stopping once none are left with enough durability.",
+
+	"text.autoconfig.smartautoattack.option.toolKeyword": "Tool keyword",
+	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "Used when Use more tools is on. Substring match (case-insensitive) against the weapon's item ID, e.g. 'sword' matches minecraft:diamond_sword, minecraft:netherite_sword, etc.",
+
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled": "Hunger safety stop",
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your hunger drops below the threshold below, independent of the auto-eat feature. A safety net for hardcore/no-food-on-hand situations. Turn off if you don't want any hunger-based behavior at all (e.g. servers where you regenerate via a beacon and don't care about hunger).",
 
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold": "Hunger safety threshold",
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold.@Tooltip": "Stop when hunger drops below this value, on the vanilla 0-20 hunger scale (20 = full, each drumstick icon = 2 points). Only used while Hunger safety stop above is on.",
+
+	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled": "Health safety stop",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your health drops below the threshold below, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). A safety net independent of everything else. Turn off if you don't want any health-based behavior at all.",
+
+	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold": "Health safety threshold",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold.@Tooltip": "Stop when health drops below this value, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). Only used while Health safety stop above is on.",
 
 	"text.autoconfig.smartautoattack.option.filterMode": "Target filter mode",
 	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except entities in the list below. WHITELIST: only attack entities in the list below.",
@@ -66,6 +78,12 @@
 
 	"text.autoconfig.smartautoattack.option.autoStopSound": "Auto-stop sound",
 	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Full sound event ID to play on auto-stop, e.g. minecraft:block.bell.use, minecraft:entity.experience_orb.pickup, minecraft:entity.villager.no. Invalid/unknown IDs simply play nothing.",
+
+	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect": "Resume after manual reconnect",
+	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect.@Tooltip": "Off (default): if you reconnect yourself (not via the separate Smart Auto Reconnect mod), the mod turns itself off rather than silently resuming. On: it stays on and resumes after a short settle buffer, same as a scripted reconnect always does regardless of this setting.",
+
+	"text.autoconfig.smartautoattack.option.autoEatEnabled": "Auto-eat enabled",
+	"text.autoconfig.smartautoattack.option.autoEatEnabled.@Tooltip": "On (default): auto-eat is active whenever the hotbar slot below is set. Off: auto-eat never triggers, regardless of the hotbar slot - a quick way to disable eating without losing your configured slot/threshold.",
 
 	"text.autoconfig.smartautoattack.option.autoEatSlot": "Auto-eat hotbar slot (0 = off)",
 	"text.autoconfig.smartautoattack.option.autoEatSlot.@Tooltip": "Hotbar slot (1-9) holding your food item. 0 disables auto-eat.",

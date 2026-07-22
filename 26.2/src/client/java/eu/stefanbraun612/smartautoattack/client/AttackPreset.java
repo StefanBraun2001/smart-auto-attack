@@ -10,6 +10,8 @@ public class AttackPreset {
 	public int maxHits = 0;
 	public int minDurability = 0;
 	public int minDurabilityPercent = 0;
+	public boolean useMoreTools = false;
+	public String toolKeyword = "sword";
 	public boolean autoEatEnabled = true;
 	public int autoEatHungerThreshold = 20;
 	public SmartAutoAttackConfig.FoodSafetyPreset foodSafetyPreset = SmartAutoAttackConfig.FoodSafetyPreset.LIGHT;
@@ -22,6 +24,8 @@ public class AttackPreset {
 		preset.maxHits = config.maxHits;
 		preset.minDurability = config.minDurability;
 		preset.minDurabilityPercent = config.minDurabilityPercent;
+		preset.useMoreTools = config.useMoreTools;
+		preset.toolKeyword = config.toolKeyword;
 		preset.autoEatEnabled = config.autoEatEnabled;
 		preset.autoEatHungerThreshold = config.autoEatHungerThreshold;
 		preset.foodSafetyPreset = config.foodSafetyPreset;
@@ -35,6 +39,8 @@ public class AttackPreset {
 		config.maxHits = maxHits;
 		config.minDurability = minDurability;
 		config.minDurabilityPercent = minDurabilityPercent;
+		config.useMoreTools = useMoreTools;
+		config.toolKeyword = toolKeyword;
 		config.autoEatEnabled = autoEatEnabled;
 		config.autoEatHungerThreshold = autoEatHungerThreshold;
 		config.foodSafetyPreset = foodSafetyPreset;
@@ -52,6 +58,12 @@ public class AttackPreset {
 		preset.foodSafetyPreset = SmartAutoAttackConfig.FoodSafetyPreset.LIGHT;
 		preset.hungerSafetyStopEnabled = true;
 		preset.hungerSafetyStopThreshold = 2;
+		return preset;
+	}
+
+	public static AttackPreset creakingMtTpAehp() {
+		AttackPreset preset = creakingTpAehp();
+		preset.useMoreTools = true;
 		return preset;
 	}
 }

@@ -56,11 +56,12 @@ public class PresetManager {
 					result.putAll(loaded);
 				}
 			} catch (IOException | RuntimeException ignored) {
-				// Corrupt/unreadable presets file - fall back to just the built-in preset below
+				// Corrupt/unreadable presets file - fall back to just the built-in presets below
 				// rather than crashing the mod over a non-essential feature.
 			}
 		}
 		result.putIfAbsent("Creaking_TP_AEHP", AttackPreset.creakingTpAehp());
+		result.putIfAbsent("Creaking_MT_TP_AEHP", AttackPreset.creakingMtTpAehp());
 		return result;
 	}
 

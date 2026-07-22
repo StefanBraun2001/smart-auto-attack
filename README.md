@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.4_AP** (alpha, tested), **MC 26.2 only** (1.20.4 support
+Current build: **A0.4.1_AP** (alpha, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4, same as the `master` branch). Grab a built jar from
 the [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`.
@@ -38,16 +38,21 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - Attack cadence: vanilla-cooldown-timed (default), fixed interval, or
   random interval, with an "always fully charge" safeguard against weak/
   discharged hits.
-- Night-only mode (with Nether/End and duration-freeze options).
+- Night-only mode, timed to the Creaking Heart's actual awake window
+  (world time 12600-23400, not the generic 13000-23000 night range), with
+  Nether/End and duration-freeze options, plus a feedback message whenever
+  it pauses/resumes so a forgotten toggle doesn't look like a bug.
 - Stop conditions: max hits, max duration, min durability (absolute/%),
   hunger safety stop, health safety stop.
+- "Use more tools": rotates to another hotbar weapon matching a keyword
+  (default `sword`) when the current one's durability guard trips.
 - Entity blacklist/whitelist (players targetable - see "uncensored branch"
   note above).
 - Auto-eat with a configurable hunger threshold and food-safety presets.
-- **Presets**: named bundles of duration/durability/night-only/auto-eat
+- **Presets**: named bundles of duration/durability/tool-rotation/auto-eat
   settings, managed via client-side commands
   (`/smartautoattack preset list|apply|save|delete`). Ships with
-  `Regular_TP_AEHP` and `Creaking_FT_TP_AEHP` - see the bundled README for
+  `Creaking_TP_AEHP` and `Creaking_MT_TP_AEHP` - see the bundled README for
   what each one sets.
 - Auto-resumes after a reconnect handled by the separate
   [Smart Auto Reconnect](https://github.com/StefanBraun2001/smart-auto-reconnect)
