@@ -112,8 +112,17 @@ public class AutoAttackLogic {
 		}
 
 		Entity target = resolveTarget(client, config);
+		// Independent of requireTargetDetected: in blind-swing mode (that toggle off),
+		// resolveTarget()'s player exclusion still blocks the actual attack packet, but
+		// blind swinging isn't gated on having a target at all, so the arm would still
+		// visibly swing while aimed at a player even though nothing gets hit. Checked
+		// separately here so the swing itself is suppressed too, not just the damage.
+		boolean crosshairOnPlayer = isCrosshairOnPlayer(client);
 
 		if (config.attackCadenceMode == SmartAutoAttackConfig.AttackCadenceMode.DEFAULT) {
+			if (crosshairOnPlayer) {
+				return;
+			}
 			if (target == null && config.requireTargetDetected) {
 				return;
 			}
@@ -126,6 +135,9 @@ public class AutoAttackLogic {
 				ticksUntilNextAttack--;
 				return;
 			}
+			if (crosshairOnPlayer) {
+				return; // stays at 0 ("ready"), same as the no-target case below
+			}
 			if (target == null && config.requireTargetDetected) {
 				return; // stays at 0 ("ready"); attacks the instant a valid target reappears
 			}
@@ -135,6 +147,14 @@ public class AutoAttackLogic {
 			performAttack(client, player, config, target);
 			ticksUntilNextAttack = nextIntervalTicks(config);
 		}
+	}
+
+	// Separate from resolveTarget() because that method also runs when the crosshair is
+	// on nothing at all (blind-swing mode) - this specifically distinguishes "nothing
+	// there" (still swings blindly) from "a player is there" (never swings, full stop).
+	private static boolean isCrosshairOnPlayer(Minecraft client) {
+		return client.hitResult != null && client.hitResult.getType() == HitResult.Type.ENTITY
+				&& ((EntityHitResult) client.hitResult).getEntity() instanceof Player;
 	}
 
 	// Nether and End have no day/night cycle (their clock is fixed/meaningless even
