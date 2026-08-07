@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.4.1_AP** (alpha, tested), **MC 26.2 only** (1.20.4 support
+Current build: **A0.4.1H2_AP** (alpha, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4, same as the `master` branch). Grab a built jar from
 the [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`.
@@ -38,6 +38,10 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - Attack cadence: vanilla-cooldown-timed (default), fixed interval, or
   random interval, with an "always fully charge" safeguard against weak/
   discharged hits.
+- Spear support: correctly triggers the spear's piercing thrust (vanilla
+  uses a different attack path for it than every other weapon) and always
+  waits for a full attack-cooldown charge first, since an uncharged spear
+  stab does nothing at all rather than just landing a weaker hit.
 - Night-only mode, timed to the Creaking Heart's actual awake window
   (world time 12600-23400, not the generic 13000-23000 night range), with
   Nether/End and duration-freeze options, plus a feedback message whenever
