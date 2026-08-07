@@ -5,6 +5,7 @@ import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.resources.sounds.SimpleSoundInstance;
+import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.resources.Identifier;
@@ -14,6 +15,7 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -118,6 +120,13 @@ public class AutoAttackLogic {
 		// visibly swing while aimed at a player even though nothing gets hit. Checked
 		// separately here so the swing itself is suppressed too, not just the damage.
 		boolean crosshairOnPlayer = isCrosshairOnPlayer(client);
+		PiercingWeapon piercingWeapon = player.getMainHandItem().get(DataComponents.PIERCING_WEAPON);
+		// Unlike other weapons, vanilla only lands a spear thrust once the attack cooldown
+		// is fully recharged - a partially-charged stab just does nothing. Force the full
+		// charge wait for spears regardless of "Always fully charge", since skipping it
+		// isn't a "weaker hit" tradeoff for them like it is for everything else - it's a
+		// wasted swing.
+		boolean requireFullCharge = config.alwaysFullyCharge || piercingWeapon != null;
 
 		if (config.attackCadenceMode == SmartAutoAttackConfig.AttackCadenceMode.DEFAULT) {
 			if (crosshairOnPlayer) {
@@ -129,7 +138,7 @@ public class AutoAttackLogic {
 			if (player.getAttackStrengthScale(0f) < 1.0f) {
 				return;
 			}
-			performAttack(client, player, config, target);
+			performAttack(client, player, config, target, piercingWeapon);
 		} else {
 			if (ticksUntilNextAttack > 0) {
 				ticksUntilNextAttack--;
@@ -141,10 +150,10 @@ public class AutoAttackLogic {
 			if (target == null && config.requireTargetDetected) {
 				return; // stays at 0 ("ready"); attacks the instant a valid target reappears
 			}
-			if (config.alwaysFullyCharge && player.getAttackStrengthScale(0f) < 1.0f) {
+			if (requireFullCharge && player.getAttackStrengthScale(0f) < 1.0f) {
 				return; // interval elapsed but weapon isn't fully charged yet - wait, don't consume it
 			}
-			performAttack(client, player, config, target);
+			performAttack(client, player, config, target, piercingWeapon);
 			ticksUntilNextAttack = nextIntervalTicks(config);
 		}
 	}
@@ -163,11 +172,23 @@ public class AutoAttackLogic {
 		return world.dimension() != Level.NETHER && world.dimension() != Level.END;
 	}
 
-	private static void performAttack(Minecraft client, Player player, SmartAutoAttackConfig config, Entity target) {
-		if (target != null) {
-			client.gameMode.attack(player, target);
+	// Spears (and anything else carrying a PiercingWeapon data component) don't use the
+	// normal single-target attack at all - vanilla's own Minecraft.startAttack() skips
+	// the crosshair/hitResult path entirely for them and calls gameMode.piercingAttack()
+	// instead, which sends a different packet and lets the server resolve a line-thrust
+	// hit itself (and swings on its own). Calling the regular gameMode.attack() on a
+	// spear sends the wrong packet, so nothing lands even though the arm swings.
+	private static void performAttack(Minecraft client, Player player, SmartAutoAttackConfig config, Entity target,
+			PiercingWeapon piercingWeapon) {
+		if (piercingWeapon != null) {
+			client.gameMode.piercingAttack(piercingWeapon);
+			player.swing(InteractionHand.MAIN_HAND);
+		} else {
+			if (target != null) {
+				client.gameMode.attack(player, target);
+			}
+			player.swing(InteractionHand.MAIN_HAND);
 		}
-		player.swing(InteractionHand.MAIN_HAND);
 
 		hitCount++;
 		if (config.maxHits > 0 && hitCount >= config.maxHits) {
