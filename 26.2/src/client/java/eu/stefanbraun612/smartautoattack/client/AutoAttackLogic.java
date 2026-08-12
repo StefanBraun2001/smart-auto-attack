@@ -10,16 +10,20 @@ import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.resources.Identifier;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.tags.ItemTags;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.PiercingWeapon;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 
+import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -44,11 +48,19 @@ public class AutoAttackLogic {
 	// broke instead of behaving as configured.
 	private static Boolean nightGatePassedLastTick = null;
 
+	// Remembers the last non-empty main-hand item, for SAME_TYPE/EXACT_MATCH tool rotation.
+	// Needed because once a weapon actually breaks (no durability floor set to catch it
+	// first), the main hand reads as empty/air by the time the rotation search runs - by
+	// then the item's own class/identity is gone, so without this there'd be nothing left
+	// to compare candidates against for those two modes.
+	private static ItemStack lastKnownMainHandItem = ItemStack.EMPTY;
+
 	public static void reset() {
 		hitCount = 0;
 		elapsedActiveTicks = 0;
 		ticksUntilNextAttack = 0; // ready to attack immediately once enabled
 		nightGatePassedLastTick = null;
+		lastKnownMainHandItem = ItemStack.EMPTY;
 	}
 
 	public static void tick(Minecraft client) {
@@ -260,12 +272,22 @@ public class AutoAttackLogic {
 	// and the current one just dropped below the threshold). Returns false only when
 	// there's nothing left usable and the mod should stop.
 	private static boolean ensureUsableTool(Minecraft client, Player player, SmartAutoAttackConfig config) {
-		if (hasEnoughDurability(player.getMainHandItem(), config)) {
+		ItemStack currentTool = player.getMainHandItem();
+		if (!currentTool.isEmpty()) {
+			lastKnownMainHandItem = currentTool; // still equipped - remember it in case it breaks entirely
+		}
+		if (hasEnoughDurability(currentTool, config)) {
 			return true;
 		}
 		if (!config.useMoreTools) {
 			return false;
 		}
+
+		// If the weapon has already broken to empty/air (no durability floor set to catch it
+		// first), fall back to the last item we saw equipped so SAME_TYPE/EXACT_MATCH still
+		// have something meaningful to compare against - matching against air's own item
+		// class would otherwise match almost anything, including food.
+		ItemStack referenceTool = currentTool.isEmpty() ? lastKnownMainHandItem : currentTool;
 
 		Inventory inventory = player.getInventory();
 		for (int slot = 0; slot < 9; slot++) {
@@ -273,7 +295,7 @@ public class AutoAttackLogic {
 				continue;
 			}
 			ItemStack candidate = inventory.getItem(slot);
-			if (candidate.isEmpty() || !matchesKeyword(candidate, config.toolKeyword)) {
+			if (candidate.isEmpty() || !matchesRotationCriteria(candidate, referenceTool, config)) {
 				continue;
 			}
 			if (!hasEnoughDurability(candidate, config)) {
@@ -283,6 +305,41 @@ public class AutoAttackLogic {
 			return true;
 		}
 		return false;
+	}
+
+	// Swords (and most other vanilla weapons/tools as of this MC version) no longer have
+	// their own Item subclass - they're plain Item instances distinguished only by data
+	// components/tags, so comparing getClass() lumps them in with everything else that's
+	// also just a plain Item (including food). Use vanilla's own tool-category tags
+	// instead, which is also more correct for modded weapons that register into them.
+	private static final List<TagKey<Item>> TOOL_TYPE_TAGS = List.of(
+			ItemTags.PICKAXES, ItemTags.AXES, ItemTags.SHOVELS, ItemTags.HOES, ItemTags.SWORDS, ItemTags.SPEARS);
+
+	private static boolean sameToolType(ItemStack candidate, ItemStack referenceTool) {
+		for (TagKey<Item> tag : TOOL_TYPE_TAGS) {
+			if (referenceTool.is(tag)) {
+				return candidate.is(tag);
+			}
+		}
+		// referenceTool isn't in any known tool-category tag (e.g. a trident, or a modded
+		// weapon that doesn't register into one) - fall back to class equality, which still
+		// works for vanilla's remaining single-item-per-category weapons.
+		return candidate.getItem().getClass() == referenceTool.getItem().getClass();
+	}
+
+	// referenceTool is the weapon that just ran low (or, if it already broke to empty, the
+	// last non-empty item we saw equipped - see ensureUsableTool).
+	private static boolean matchesRotationCriteria(ItemStack candidate, ItemStack referenceTool, SmartAutoAttackConfig config) {
+		if (referenceTool.isEmpty() && config.toolRotationMode != SmartAutoAttackConfig.ToolRotationMode.KEYWORD) {
+			// Never saw a weapon equipped this run - nothing to compare against, so SAME_TYPE/
+			// EXACT_MATCH can't mean anything yet (KEYWORD doesn't need a reference at all).
+			return false;
+		}
+		return switch (config.toolRotationMode) {
+			case KEYWORD -> matchesKeyword(candidate, config.toolKeyword);
+			case SAME_TYPE -> sameToolType(candidate, referenceTool);
+			case EXACT_MATCH -> candidate.getItem() == referenceTool.getItem();
+		};
 	}
 
 	private static boolean matchesKeyword(ItemStack stack, String keyword) {

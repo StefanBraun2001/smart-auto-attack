@@ -49,8 +49,11 @@
 	"text.autoconfig.smartautoattack.option.useMoreTools": "Use more tools",
 	"text.autoconfig.smartautoattack.option.useMoreTools.@Tooltip": "Off (default): stop as soon as the current weapon's durability guard triggers. On: instead, look for another matching weapon (see Tool keyword below) elsewhere in your hotbar and switch to it, only stopping once none are left with enough durability.",
 
+	"text.autoconfig.smartautoattack.option.toolRotationMode": "Tool rotation mode",
+	"text.autoconfig.smartautoattack.option.toolRotationMode.@Tooltip": "Used when Use more tools is on - how a hotbar item is judged as a valid replacement. KEYWORD: substring match against the item ID (see Tool keyword below). SAME_TYPE: any weapon of the same class as the one that just ran low (e.g. any sword replaces any sword), regardless of material. EXACT_MATCH: only the exact same item (e.g. only another diamond sword replaces a diamond sword).",
+
 	"text.autoconfig.smartautoattack.option.toolKeyword": "Tool keyword",
-	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "Used when Use more tools is on. Substring match (case-insensitive) against the weapon's item ID, e.g. 'sword' matches minecraft:diamond_sword, minecraft:netherite_sword, etc.",
+	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "Only used when Tool rotation mode is KEYWORD. Substring match (case-insensitive) against the weapon's item ID, e.g. 'sword' matches minecraft:diamond_sword, minecraft:netherite_sword, etc.",
 
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled": "Hunger safety stop",
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your hunger drops below the threshold below, independent of the auto-eat feature. A safety net for hardcore/no-food-on-hand situations. Turn off if you don't want any hunger-based behavior at all (e.g. servers where you regenerate via a beacon and don't care about hunger).",
