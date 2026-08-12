@@ -11,6 +11,7 @@ public class AttackPreset {
 	public int minDurability = 0;
 	public int minDurabilityPercent = 0;
 	public boolean useMoreTools = false;
+	public SmartAutoAttackConfig.ToolRotationMode toolRotationMode = SmartAutoAttackConfig.ToolRotationMode.KEYWORD;
 	public String toolKeyword = "sword";
 	public boolean autoEatEnabled = true;
 	public int autoEatHungerThreshold = 20;
@@ -25,6 +26,7 @@ public class AttackPreset {
 		preset.minDurability = config.minDurability;
 		preset.minDurabilityPercent = config.minDurabilityPercent;
 		preset.useMoreTools = config.useMoreTools;
+		preset.toolRotationMode = config.toolRotationMode;
 		preset.toolKeyword = config.toolKeyword;
 		preset.autoEatEnabled = config.autoEatEnabled;
 		preset.autoEatHungerThreshold = config.autoEatHungerThreshold;
@@ -40,6 +42,7 @@ public class AttackPreset {
 		config.minDurability = minDurability;
 		config.minDurabilityPercent = minDurabilityPercent;
 		config.useMoreTools = useMoreTools;
+		config.toolRotationMode = toolRotationMode;
 		config.toolKeyword = toolKeyword;
 		config.autoEatEnabled = autoEatEnabled;
 		config.autoEatHungerThreshold = autoEatHungerThreshold;
