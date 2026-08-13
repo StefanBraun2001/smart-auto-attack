@@ -70,7 +70,7 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 				return;
 			}
 			if (enabled) {
-				AutoEatLogic.tick(client);
+				AutoEatLogic.tick(client, AutoAttackLogic.isCriticalHealthPauseActive());
 				// Don't attack while mid-chew: attacking cancels the vanilla eat-use
 				// action, which would otherwise cause an endless "switch to food,
 				// get interrupted, switch back" loop without ever finishing a bite.
@@ -98,6 +98,7 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 	public static void setEnabled(boolean value, Minecraft client) {
 		enabled = value;
 		AutoAttackLogic.reset();
+		AutoEatLogic.reset();
 		SmartAutoAttackConfig config = AutoConfig.getConfigHolder(SmartAutoAttackConfig.class).getConfig();
 		FeedbackUtil.send(client, config, value ? "Smart Auto Attack: ON" : "Smart Auto Attack: OFF");
 	}

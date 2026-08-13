@@ -4,10 +4,11 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.4.1H2** (alpha, tested), **MC 26.2 only** (1.20.4 support
+Current build: **A0.4.3** (alpha, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4). Grab a built jar from the
 [Releases](../../releases) page, or build from source with
-`./gradlew build` inside `26.2/`.
+`./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
+a full walkthrough of every setting.
 
 **This mod cannot attack players** (see "Player targeting" below) - that's
 a Modrinth Content Rules requirement, not a design choice, and it's not
@@ -32,12 +33,28 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
   (world time 12600-23400, not the generic 13000-23000 night range), with
   Nether/End and duration-freeze options, plus a feedback message whenever
   it pauses/resumes so a forgotten toggle doesn't look like a bug.
+- **Adjust to Creakings**: while your crosshair is on a Creaking, temporarily
+  switches to the ideal Creaking setup (100-tick interval, night only,
+  ignoring Nether/End day-night) without touching your saved settings, then
+  reverts the moment it isn't. Announces both transitions.
 - Stop conditions: max hits, max duration, min durability (absolute/%),
   hunger safety stop, health safety stop.
-- "Use more tools": rotates to another hotbar weapon matching a keyword
-  (default `sword`) when the current one's durability guard trips.
+- Health safety stop can either hard-disable (default) or, with **Eat food
+  to regenerate health** on, pause everything (including all timers),
+  force-feed until hunger is full, and wait for health to climb 2 hearts
+  above the threshold before resuming - only giving up after 45 seconds.
+  Both hunger and health safety can also be set to ignore themselves
+  entirely while you have Regeneration (e.g. near a beacon); a **Paranoia
+  switch** overrides that specifically for the eat-to-recover path, so
+  hunger never goes untended even while regenerating.
+- "Use more tools": rotates to another hotbar weapon when the current one's
+  durability guard trips - by keyword (default `sword`), by weapon
+  category (any material), or requiring an exact item match.
 - Entity blacklist/whitelist (players excluded unconditionally - see below).
-- Auto-eat with a configurable hunger threshold and food-safety presets.
+- Auto-eat with a configurable hunger threshold, either from one fixed
+  slot or the first eligible food anywhere in the hotbar, and a choice of
+  how much to eat per trigger: one bite, as much as won't waste nutrition
+  past a full bar, or straight to full regardless of waste.
 - **Presets**: named bundles of duration/durability/tool-rotation/cadence/
   night-only/auto-eat settings, managed via client-side commands
   (`/smartautoattack preset list|apply|save|delete`). Ships with
@@ -61,12 +78,15 @@ entirely). This is required by Modrinth Content Rules 3.3d ("automatic or
 assisted PvP combat" needs a genuine server-side opt-in, which this project
 doesn't implement).
 
-An **uncensored** variant without this restriction is maintained on the
-[`uncensored` branch](../../tree/uncensored) and released only as GitHub
-Releases tagged `_AP` ("attacks players") - never uploaded to Modrinth.
-Use it only on servers you own or have explicit permission on; automated
-combat against other players is very likely to violate a typical server's
-rules and get flagged by anti-cheat regardless of what the mod is called.
+An **uncensored** variant without this restriction was previously
+maintained as a separate `_AP` ("attacks players") build. Past releases
+tagged `_AP` remain available on the [Releases](../../releases) page, but
+that variant is no longer actively maintained or updated - only the
+Modrinth-compliant build above continues to receive new features. Use any
+existing `_AP` build only on servers you own or have explicit permission
+on; automated combat against other players is very likely to violate a
+typical server's rules and get flagged by anti-cheat regardless of what
+the mod is called.
 
 ## Building from source
 

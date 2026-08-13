@@ -5,95 +5,116 @@
 	"text.autoconfig.smartautoattack.title": "Smart Auto Attack",
 
 	"text.autoconfig.smartautoattack.option.attackCadenceMode": "Attack cadence",
-	"text.autoconfig.smartautoattack.option.attackCadenceMode.@Tooltip": "DEFAULT: attack whenever the vanilla attack cooldown is at 100%. FIXED_INTERVAL: attack once every X ticks/seconds, ignoring the vanilla cooldown. RANDOM_INTERVAL: attack once every random X-Y ticks/seconds.",
+	"text.autoconfig.smartautoattack.option.attackCadenceMode.@Tooltip": "DEFAULT: attack on full cooldown. FIXED_INTERVAL: attack every X ticks/seconds. RANDOM_INTERVAL: attack every random X-Y ticks/seconds.",
 
 	"text.autoconfig.smartautoattack.option.intervalUnit": "Interval unit",
-	"text.autoconfig.smartautoattack.option.intervalUnit.@Tooltip": "Whether the fixed/random interval values below are in ticks (20 ticks = 1 second, default) or seconds.",
+	"text.autoconfig.smartautoattack.option.intervalUnit.@Tooltip": "Ticks (20/sec) or seconds, for the interval values below.",
 
 	"text.autoconfig.smartautoattack.option.fixedIntervalValue": "Fixed interval value",
-	"text.autoconfig.smartautoattack.option.fixedIntervalValue.@Tooltip": "Used when Attack cadence = FIXED_INTERVAL. Value is in the unit chosen above.",
+	"text.autoconfig.smartautoattack.option.fixedIntervalValue.@Tooltip": "Used by FIXED_INTERVAL cadence.",
 
 	"text.autoconfig.smartautoattack.option.randomIntervalMin": "Random interval min",
-	"text.autoconfig.smartautoattack.option.randomIntervalMin.@Tooltip": "Used when Attack cadence = RANDOM_INTERVAL. Value is in the unit chosen above.",
+	"text.autoconfig.smartautoattack.option.randomIntervalMin.@Tooltip": "Used by RANDOM_INTERVAL cadence.",
 
 	"text.autoconfig.smartautoattack.option.randomIntervalMax": "Random interval max",
-	"text.autoconfig.smartautoattack.option.randomIntervalMax.@Tooltip": "Used when Attack cadence = RANDOM_INTERVAL. Value is in the unit chosen above.",
+	"text.autoconfig.smartautoattack.option.randomIntervalMax.@Tooltip": "Used by RANDOM_INTERVAL cadence.",
 
 	"text.autoconfig.smartautoattack.option.requireTargetDetected": "Require target detected",
-	"text.autoconfig.smartautoattack.option.requireTargetDetected.@Tooltip": "On (default): only attack when a valid entity is under your crosshair (respects the blacklist/whitelist below). Off: attack blindly on every interval whether or not anything is there - this bypasses the blacklist/whitelist entirely.",
+	"text.autoconfig.smartautoattack.option.requireTargetDetected.@Tooltip": "On (default): only attack a crosshair target. Off: swing blindly every interval, bypassing the blacklist/whitelist.",
 
 	"text.autoconfig.smartautoattack.option.alwaysFullyCharge": "Always fully charge",
-	"text.autoconfig.smartautoattack.option.alwaysFullyCharge.@Tooltip": "Only matters for FIXED_INTERVAL/RANDOM_INTERVAL cadence (DEFAULT always waits for full charge regardless). On (default): also wait for the vanilla attack cooldown to reach 100% before swinging, even if your configured interval elapsed first - prevents weak/discharged hits from an interval shorter than your weapon's real cooldown. Off: attacks strictly on your configured interval regardless of charge, which can produce reduced-damage hits if the interval is shorter than the weapon's cooldown.",
+	"text.autoconfig.smartautoattack.option.alwaysFullyCharge.@Tooltip": "FIXED/RANDOM interval only. On (default): still wait for full cooldown before swinging. Off: attack strictly on interval, risking weaker hits.",
 
 	"text.autoconfig.smartautoattack.option.nightOnly": "Night only",
-	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack while it is night (time 13000-23000). Useful for AFK-farming creakings.",
+	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack at night. Useful for AFK-farming Creakings.",
 
 	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle": "Ignore night-only in Nether/End",
-	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle.@Tooltip": "Off (default): Night only still applies everywhere, using the shared world-time clock even though the Nether/End have no visible day-night cycle. On: while Night only is enabled, always allow attacking in the Nether and the End (only the Overworld - or any other dimension with a real day-night cycle - still requires night).",
+	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle.@Tooltip": "On: Night only no longer applies in the Nether/End (no real day-night cycle there anyway).",
 
 	"text.autoconfig.smartautoattack.option.freezeDurationDuringDay": "Freeze duration timer during day",
-	"text.autoconfig.smartautoattack.option.freezeDurationDuringDay.@Tooltip": "Only matters when Night only is enabled. Off (default): the max duration timer counts real time elapsed since you enabled auto-attack, day or night. On: the timer pauses during the day, so only the time actually spent attacking at night counts toward the max duration limit.",
+	"text.autoconfig.smartautoattack.option.freezeDurationDuringDay.@Tooltip": "Night only, pauses the max-duration timer during the day so it only counts night time.",
+
+	"text.autoconfig.smartautoattack.option.adjustToCreakings": "Adjust to Creakings",
+	"text.autoconfig.smartautoattack.option.adjustToCreakings.@Tooltip": "On: while your crosshair is on a Creaking, temporarily switches to the ideal Creaking setup (100-tick interval, night only) without changing your saved settings. Announces when it kicks in/reverts.",
 
 	"text.autoconfig.smartautoattack.option.maxHits": "Max hits (0 = unlimited)",
-	"text.autoconfig.smartautoattack.option.maxHits.@Tooltip": "Auto-disable after this many hits. 0 disables the limit. Stacks with the max duration below - whichever limit is hit first stops it.",
+	"text.autoconfig.smartautoattack.option.maxHits.@Tooltip": "Auto-disable after this many hits.",
 
 	"text.autoconfig.smartautoattack.option.maxDuration": "Max duration (empty = unlimited)",
-	"text.autoconfig.smartautoattack.option.maxDuration.@Tooltip": "Free text, e.g. '90m', '1.5h', '5400s', '1h30m', or a bare number of seconds. Auto-disable after this long. Stacks with max hits above - whichever limit is hit first stops it.",
+	"text.autoconfig.smartautoattack.option.maxDuration.@Tooltip": "e.g. '90m', '1.5h', '1h30m'. Auto-disable after this long.",
 
 	"text.autoconfig.smartautoattack.option.minDurability": "Min durability (0 = disabled)",
-	"text.autoconfig.smartautoattack.option.minDurability.@Tooltip": "Stop before the main-hand item's remaining durability drops below this absolute value.",
+	"text.autoconfig.smartautoattack.option.minDurability.@Tooltip": "Stop before durability drops below this absolute value.",
 
 	"text.autoconfig.smartautoattack.option.minDurabilityPercent": "Min durability % (0 = disabled)",
-	"text.autoconfig.smartautoattack.option.minDurabilityPercent.@Tooltip": "Stop before the main-hand item's remaining durability drops below this percentage.",
+	"text.autoconfig.smartautoattack.option.minDurabilityPercent.@Tooltip": "Stop before durability drops below this percentage.",
 
 	"text.autoconfig.smartautoattack.option.useMoreTools": "Use more tools",
-	"text.autoconfig.smartautoattack.option.useMoreTools.@Tooltip": "Off (default): stop as soon as the current weapon's durability guard triggers. On: instead, look for another matching weapon (see Tool keyword below) elsewhere in your hotbar and switch to it, only stopping once none are left with enough durability.",
+	"text.autoconfig.smartautoattack.option.useMoreTools.@Tooltip": "On: switch to another matching weapon in the hotbar instead of stopping when durability runs low.",
 
 	"text.autoconfig.smartautoattack.option.toolRotationMode": "Tool rotation mode",
-	"text.autoconfig.smartautoattack.option.toolRotationMode.@Tooltip": "Used when Use more tools is on - how a hotbar item is judged as a valid replacement. KEYWORD: substring match against the item ID (see Tool keyword below). SAME_TYPE: any weapon of the same class as the one that just ran low (e.g. any sword replaces any sword), regardless of material. EXACT_MATCH: only the exact same item (e.g. only another diamond sword replaces a diamond sword).",
+	"text.autoconfig.smartautoattack.option.toolRotationMode.@Tooltip": "How replacements are picked. KEYWORD: item ID contains the keyword below. SAME_TYPE: same weapon category, any material. EXACT_MATCH: identical item only.",
 
 	"text.autoconfig.smartautoattack.option.toolKeyword": "Tool keyword",
-	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "Only used when Tool rotation mode is KEYWORD. Substring match (case-insensitive) against the weapon's item ID, e.g. 'sword' matches minecraft:diamond_sword, minecraft:netherite_sword, etc.",
+	"text.autoconfig.smartautoattack.option.toolKeyword.@Tooltip": "KEYWORD mode only. e.g. 'sword' matches any *_sword.",
 
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled": "Hunger safety stop",
-	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your hunger drops below the threshold below, independent of the auto-eat feature. A safety net for hardcore/no-food-on-hand situations. Turn off if you don't want any hunger-based behavior at all (e.g. servers where you regenerate via a beacon and don't care about hunger).",
+	"text.autoconfig.smartautoattack.option.hungerSafetyStopEnabled.@Tooltip": "On (default): auto-disable if hunger drops below the threshold below.",
 
 	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold": "Hunger safety threshold",
-	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold.@Tooltip": "Stop when hunger drops below this value, on the vanilla 0-20 hunger scale (20 = full, each drumstick icon = 2 points). Only used while Hunger safety stop above is on.",
+	"text.autoconfig.smartautoattack.option.hungerSafetyStopThreshold.@Tooltip": "0-20 hunger scale (20 = full bar).",
+
+	"text.autoconfig.smartautoattack.option.ignoreHungerSafetyWhileRegenerating": "Ignore hunger safety while regenerating",
+	"text.autoconfig.smartautoattack.option.ignoreHungerSafetyWhileRegenerating.@Tooltip": "On: skip the hunger safety stop entirely while you have Regeneration (e.g. near a beacon).",
 
 	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled": "Health safety stop",
-	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled.@Tooltip": "On (default): auto-disable if your health drops below the threshold below, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). A safety net independent of everything else. Turn off if you don't want any health-based behavior at all.",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopEnabled.@Tooltip": "On (default): react once health drops below the threshold below - stop, or pause-and-eat if the option below is on.",
 
 	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold": "Health safety threshold",
-	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold.@Tooltip": "Stop when health drops below this value, on the vanilla 0-20 health scale (20 = full, each heart icon = 2 points). Only used while Health safety stop above is on.",
+	"text.autoconfig.smartautoattack.option.healthSafetyStopThreshold.@Tooltip": "0-20 health scale (each heart = 2 points).",
+
+	"text.autoconfig.smartautoattack.option.eatToRegenerateHealth": "Eat food to regenerate health",
+	"text.autoconfig.smartautoattack.option.eatToRegenerateHealth.@Tooltip": "Off (default): the health safety stop above just auto-disables. On: instead, pause (incl. all timers) and force-feed from Auto-eat until hunger is full, then wait for health to climb 2 hearts above the threshold before resuming. Gives up after 45 seconds. Needs an auto-eat food source configured.",
+
+	"text.autoconfig.smartautoattack.option.ignoreHealthSafetyWhileRegenerating": "Ignore health safety while regenerating",
+	"text.autoconfig.smartautoattack.option.ignoreHealthSafetyWhileRegenerating.@Tooltip": "On: skip the health safety stop/pause entirely while you have Regeneration (e.g. near a beacon).",
+
+	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled": "Paranoia switch",
+	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled.@Tooltip": "Off (default). On: don't fully trust Regeneration - still pause-and-eat when triggered even while regenerating, so hunger never goes untended. Needs Eat to regenerate health and Auto-eat both on.",
 
 	"text.autoconfig.smartautoattack.option.filterMode": "Target filter mode",
-	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except entities in the list below. WHITELIST: only attack entities in the list below.",
+	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except the list below. WHITELIST: only attack the list below.",
 
 	"text.autoconfig.smartautoattack.option.targetList": "Entity type list",
-	"text.autoconfig.smartautoattack.option.targetList.@Tooltip": "Entity type IDs, e.g. minecraft:player, minecraft:villager, minecraft:drowned, minecraft:zombified_piglin. Use the + button to add entries.",
+	"text.autoconfig.smartautoattack.option.targetList.@Tooltip": "e.g. minecraft:player, minecraft:villager.",
 
 	"text.autoconfig.smartautoattack.option.feedbackMode": "Feedback message",
-	"text.autoconfig.smartautoattack.option.feedbackMode.@Tooltip": "How to notify you when auto-attack toggles or auto-stops.",
+	"text.autoconfig.smartautoattack.option.feedbackMode.@Tooltip": "How to notify you of toggles/auto-stops.",
 
 	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop": "Play sound on auto-stop",
-	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop.@Tooltip": "On (default): play the sound below whenever the mod stops itself (durability/no usable weapon left, hunger safety, hit limit, time limit). Does not play when you manually toggle it off yourself.",
+	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop.@Tooltip": "On (default): play a sound whenever the mod auto-stops itself.",
 
 	"text.autoconfig.smartautoattack.option.autoStopSound": "Auto-stop sound",
-	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Full sound event ID to play on auto-stop, e.g. minecraft:block.bell.use, minecraft:entity.experience_orb.pickup, minecraft:entity.villager.no. Invalid/unknown IDs simply play nothing.",
+	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Sound event ID, e.g. minecraft:block.bell.use.",
 
 	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect": "Resume after manual reconnect",
-	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect.@Tooltip": "Off (default): if you reconnect yourself (not via the separate Smart Auto Reconnect mod), the mod turns itself off rather than silently resuming. On: it stays on and resumes after a short settle buffer, same as a scripted reconnect always does regardless of this setting.",
+	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect.@Tooltip": "Off (default): a manual reconnect turns the mod off. On: it resumes automatically.",
 
 	"text.autoconfig.smartautoattack.option.autoEatEnabled": "Auto-eat enabled",
-	"text.autoconfig.smartautoattack.option.autoEatEnabled.@Tooltip": "On (default): auto-eat is active whenever the hotbar slot below is set. Off: auto-eat never triggers, regardless of the hotbar slot - a quick way to disable eating without losing your configured slot/threshold.",
+	"text.autoconfig.smartautoattack.option.autoEatEnabled.@Tooltip": "On (default): auto-eat is active. Off: never eats automatically.",
+
+	"text.autoconfig.smartautoattack.option.autoEatSearchAnySlot": "Search any hotbar slot",
+	"text.autoconfig.smartautoattack.option.autoEatSearchAnySlot.@Tooltip": "Off (default): only eat from the slot below. On: eat the first eligible food anywhere in the hotbar.",
 
 	"text.autoconfig.smartautoattack.option.autoEatSlot": "Auto-eat hotbar slot (0 = off)",
-	"text.autoconfig.smartautoattack.option.autoEatSlot.@Tooltip": "Hotbar slot (1-9) holding your food item. 0 disables auto-eat.",
+	"text.autoconfig.smartautoattack.option.autoEatSlot.@Tooltip": "1-9. Ignored when Search any hotbar slot is on.",
 
 	"text.autoconfig.smartautoattack.option.autoEatHungerThreshold": "Auto-eat hunger threshold",
-	"text.autoconfig.smartautoattack.option.autoEatHungerThreshold.@Tooltip": "Eat a bite when your hunger drops below this value, on the vanilla 0-20 hunger scale (same as the hunger bar: 20 = full, each drumstick icon = 2 points, so 10 = half the bar).",
+	"text.autoconfig.smartautoattack.option.autoEatHungerThreshold.@Tooltip": "Start eating once hunger drops below this (0-20).",
+
+	"text.autoconfig.smartautoattack.option.autoEatAmountMode": "Auto-eat amount",
+	"text.autoconfig.smartautoattack.option.autoEatAmountMode.@Tooltip": "EAT_ONCE (default): one bite per dip below the threshold. DONT_OVEREAT: keep eating without wasting nutrition past 20. FILL_HUNGER: keep eating to a full bar, regardless of waste.",
 
 	"text.autoconfig.smartautoattack.option.foodSafetyPreset": "Auto-eat food safety",
-	"text.autoconfig.smartautoattack.option.foodSafetyPreset.@Tooltip": "LIGHT (default): blocks only enchanted golden apple and pufferfish. FOOD_INSPECTOR: also blocks rotten flesh, spider eye, raw chicken, and poisonous potato. RAT: no extra blocks. Cake and chorus fruit are always blocked no matter the preset."
+	"text.autoconfig.smartautoattack.option.foodSafetyPreset.@Tooltip": "LIGHT (default): blocks golden apple/pufferfish. FOOD_INSPECTOR: also rotten flesh/spider eye/raw chicken/poisonous potato. RAT: no extra blocks."
 }

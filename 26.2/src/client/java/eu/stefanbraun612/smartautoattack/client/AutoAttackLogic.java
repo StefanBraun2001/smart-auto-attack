@@ -13,7 +13,9 @@ import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
@@ -48,6 +50,10 @@ public class AutoAttackLogic {
 	// broke instead of behaving as configured.
 	private static Boolean nightGatePassedLastTick = null;
 
+	// Tracks the "Adjust to Creakings" override's state across ticks, same transition-only-
+	// message purpose as nightGatePassedLastTick above.
+	private static Boolean creakingOverrideActiveLastTick = null;
+
 	// Remembers the last non-empty main-hand item, for SAME_TYPE/EXACT_MATCH tool rotation.
 	// Needed because once a weapon actually breaks (no durability floor set to catch it
 	// first), the main hand reads as empty/air by the time the rotation search runs - by
@@ -55,12 +61,31 @@ public class AutoAttackLogic {
 	// to compare candidates against for those two modes.
 	private static ItemStack lastKnownMainHandItem = ItemStack.EMPTY;
 
+	// Health-guard pause (only when Eat food to regenerate health is on): freezes everything
+	// (including timers) once health drops below the configured threshold, force-feeds via
+	// AutoEatLogic (see isCriticalHealthPauseActive()) until hunger is full and health has
+	// climbed back to threshold+4, then resumes normally. Gives up and stops the mod if that
+	// recovery doesn't happen within the timeout below.
+	private static boolean criticalHealthPauseActive = false;
+	private static int criticalHealthPauseTicks = 0;
+	private static final float CRITICAL_HEALTH_RESUME_MARGIN = 4.0f; // 2 hearts above the threshold
+	private static final int CRITICAL_HEALTH_PAUSE_TIMEOUT_TICKS = 900; // 45 seconds
+
 	public static void reset() {
 		hitCount = 0;
 		elapsedActiveTicks = 0;
 		ticksUntilNextAttack = 0; // ready to attack immediately once enabled
 		nightGatePassedLastTick = null;
+		creakingOverrideActiveLastTick = null;
 		lastKnownMainHandItem = ItemStack.EMPTY;
+		criticalHealthPauseActive = false;
+		criticalHealthPauseTicks = 0;
+	}
+
+	// Read by SmartAutoAttackClient to tell AutoEatLogic to force-feed past its normal
+	// threshold while a critical-health pause is in progress.
+	public static boolean isCriticalHealthPauseActive() {
+		return criticalHealthPauseActive;
 	}
 
 	public static void tick(Minecraft client) {
@@ -71,8 +96,30 @@ public class AutoAttackLogic {
 			return;
 		}
 
+		if (handleHealthGuard(client, player, config)) {
+			return;
+		}
+
+		boolean creakingOverrideActive = config.adjustToCreakings && isCrosshairOnCreaking(client);
+		if (creakingOverrideActiveLastTick == null || creakingOverrideActiveLastTick != creakingOverrideActive) {
+			if (creakingOverrideActive) {
+				FeedbackUtil.send(client, config,
+						"Smart Auto Attack: Creaking detected - adjusting to Creaking preset (100-tick interval, night only, ignoring Nether/End day-night)");
+			} else if (creakingOverrideActiveLastTick != null) {
+				FeedbackUtil.send(client, config, "Smart Auto Attack: Creaking no longer detected - reverting to configured settings");
+			}
+		}
+		creakingOverrideActiveLastTick = creakingOverrideActive;
+
+		// While active, overrides only these three settings for this tick - never written back
+		// to config, so the player's actual preset/settings are untouched once the Creaking
+		// leaves reach.
+		boolean effectiveNightOnly = creakingOverrideActive || config.nightOnly;
+		boolean effectiveSkipNightCheckInDimensionsWithoutCycle = creakingOverrideActive || config.skipNightCheckInDimensionsWithoutCycle;
+		boolean effectiveFreezeDurationDuringDay = creakingOverrideActive || config.freezeDurationDuringDay;
+
 		boolean isDaytime = false;
-		if (config.nightOnly) {
+		if (effectiveNightOnly) {
 			long timeOfDay = world.getOverworldClockTime() % 24000;
 			// Matches the Creaking Heart's own awake window (Minecraft Wiki), not the
 			// textbook 13000/23000 generic night thresholds - creakings specifically
@@ -80,11 +127,11 @@ public class AutoAttackLogic {
 			isDaytime = timeOfDay < 12600 || timeOfDay > 23400;
 		}
 
-		boolean skipNightGate = config.nightOnly && config.skipNightCheckInDimensionsWithoutCycle
+		boolean skipNightGate = effectiveNightOnly && effectiveSkipNightCheckInDimensionsWithoutCycle
 				&& !dimensionHasDayNightCycle(world);
-		boolean nightGatePasses = !config.nightOnly || skipNightGate || !isDaytime;
+		boolean nightGatePasses = !effectiveNightOnly || skipNightGate || !isDaytime;
 
-		if (config.nightOnly) {
+		if (effectiveNightOnly) {
 			if (nightGatePassedLastTick == null || nightGatePassedLastTick != nightGatePasses) {
 				FeedbackUtil.send(client, config, nightGatePasses
 						? "Smart Auto Attack: night has begun - attacking"
@@ -95,7 +142,7 @@ public class AutoAttackLogic {
 			nightGatePassedLastTick = null; // stale state - re-evaluate cleanly if night only gets turned back on
 		}
 
-		boolean pausedForDuration = config.freezeDurationDuringDay && config.nightOnly && isDaytime && !skipNightGate;
+		boolean pausedForDuration = effectiveFreezeDurationDuringDay && effectiveNightOnly && isDaytime && !skipNightGate;
 		if (!pausedForDuration) {
 			elapsedActiveTicks++;
 		}
@@ -107,11 +154,6 @@ public class AutoAttackLogic {
 
 		if (!passesHungerSafety(player, config)) {
 			stop(client, config, "Smart Auto Attack: stopped (hunger too low)");
-			return;
-		}
-
-		if (!passesHealthSafety(player, config)) {
-			stop(client, config, "Smart Auto Attack: stopped (health too low)");
 			return;
 		}
 
@@ -140,7 +182,11 @@ public class AutoAttackLogic {
 		// wasted swing.
 		boolean requireFullCharge = config.alwaysFullyCharge || piercingWeapon != null;
 
-		if (config.attackCadenceMode == SmartAutoAttackConfig.AttackCadenceMode.DEFAULT) {
+		SmartAutoAttackConfig.AttackCadenceMode effectiveCadenceMode = creakingOverrideActive
+				? SmartAutoAttackConfig.AttackCadenceMode.FIXED_INTERVAL
+				: config.attackCadenceMode;
+
+		if (effectiveCadenceMode == SmartAutoAttackConfig.AttackCadenceMode.DEFAULT) {
 			if (crosshairOnPlayer) {
 				return;
 			}
@@ -166,7 +212,9 @@ public class AutoAttackLogic {
 				return; // interval elapsed but weapon isn't fully charged yet - wait, don't consume it
 			}
 			performAttack(client, player, config, target, piercingWeapon);
-			ticksUntilNextAttack = nextIntervalTicks(config);
+			// Creakings only regenerate/form resin at their heart once every 5 seconds (100
+			// ticks), so the override always uses exactly that instead of a config-derived value.
+			ticksUntilNextAttack = creakingOverrideActive ? 100 : nextIntervalTicks(config);
 		}
 	}
 
@@ -176,6 +224,16 @@ public class AutoAttackLogic {
 	private static boolean isCrosshairOnPlayer(Minecraft client) {
 		return client.hitResult != null && client.hitResult.getType() == HitResult.Type.ENTITY
 				&& ((EntityHitResult) client.hitResult).getEntity() instanceof Player;
+	}
+
+	// Reuses the exact same crosshair pick vanilla itself uses to decide what a real attack
+	// would hit - simpler and more reliable than any custom reach/distance check, and avoids
+	// the false negatives a line-of-sight raycast hit constantly in a Creaking's actual habitat
+	// (Pale Gardens are dense with leaves, which have solid collision and blocked the ray almost
+	// all the time, making that approach detect essentially nothing).
+	private static boolean isCrosshairOnCreaking(Minecraft client) {
+		return client.hitResult != null && client.hitResult.getType() == HitResult.Type.ENTITY
+				&& ((EntityHitResult) client.hitResult).getEntity() instanceof Creaking;
 	}
 
 	// Nether and End have no day/night cycle (their clock is fixed/meaningless even
@@ -399,14 +457,70 @@ public class AutoAttackLogic {
 		if (!config.hungerSafetyStopEnabled) {
 			return true;
 		}
+		if (config.ignoreHungerSafetyWhileRegenerating && player.hasEffect(MobEffects.REGENERATION)) {
+			return true;
+		}
 		return player.getFoodData().getFoodLevel() >= config.hungerSafetyStopThreshold;
 	}
 
-	private static boolean passesHealthSafety(Player player, SmartAutoAttackConfig config) {
+	// Returns true if tick() should return immediately (either a hard stop just fired, or
+	// we're mid-recovery-pause). Merges the old "hard stop on low health" and "critical-health
+	// panic pause" into a single threshold: Eat food to regenerate health decides which of the
+	// two happens once health drops below healthSafetyStopThreshold.
+	private static boolean handleHealthGuard(Minecraft client, Player player, SmartAutoAttackConfig config) {
+		if (criticalHealthPauseActive && (!config.healthSafetyStopEnabled || !config.eatToRegenerateHealth)) {
+			criticalHealthPauseActive = false; // guard/eat-to-recover turned off mid-pause - resume immediately
+		}
 		if (!config.healthSafetyStopEnabled) {
+			return false;
+		}
+		if (isRegenerationBypassActive(player, config)) {
+			if (criticalHealthPauseActive) {
+				criticalHealthPauseActive = false; // regen kicked in mid-pause - trust it, resume
+			}
+			return false;
+		}
+
+		if (!criticalHealthPauseActive && player.getHealth() < config.healthSafetyStopThreshold) {
+			if (!config.eatToRegenerateHealth) {
+				stop(client, config, "Smart Auto Attack: stopped (health too low)");
+				return true;
+			}
+			criticalHealthPauseActive = true;
+			criticalHealthPauseTicks = 0;
+			FeedbackUtil.send(client, config, "Smart Auto Attack: paused (health critical - recovering)");
+		}
+		if (!criticalHealthPauseActive) {
+			return false;
+		}
+
+		// Clamped to max health: a high threshold (e.g. 18) plus the margin must never target
+		// above what the player can actually reach, or the pause would never resolve on its own.
+		float resumeThreshold = Math.min(config.healthSafetyStopThreshold + CRITICAL_HEALTH_RESUME_MARGIN, player.getMaxHealth());
+		if (player.getHealth() >= resumeThreshold) {
+			criticalHealthPauseActive = false;
+			FeedbackUtil.send(client, config, "Smart Auto Attack: resuming (health recovered)");
+			return false;
+		}
+		criticalHealthPauseTicks++;
+		if (criticalHealthPauseTicks >= CRITICAL_HEALTH_PAUSE_TIMEOUT_TICKS) {
+			stop(client, config, "Smart Auto Attack: stopped (health failed to recover in time)");
 			return true;
 		}
-		return player.getHealth() >= config.healthSafetyStopThreshold;
+		return true; // stays paused - AutoEatLogic force-feeds independently, see isCriticalHealthPauseActive()
+	}
+
+	// The Paranoia switch overrides the regen bypass specifically for the eat-to-recover path:
+	// it never trusts Regeneration alone to keep hunger topped up, only ever relevant while
+	// auto-eat can actually act on it.
+	private static boolean isRegenerationBypassActive(Player player, SmartAutoAttackConfig config) {
+		if (!config.ignoreHealthSafetyWhileRegenerating || !player.hasEffect(MobEffects.REGENERATION)) {
+			return false;
+		}
+		if (config.paranoiaSwitchEnabled && config.eatToRegenerateHealth && config.autoEatEnabled) {
+			return false;
+		}
+		return true;
 	}
 
 	private static boolean passesFilter(Entity target, SmartAutoAttackConfig config) {
