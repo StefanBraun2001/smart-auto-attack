@@ -4,11 +4,16 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **A0.4.3** (alpha, tested), **MC 26.2 only** (1.20.4 support
+Current build: **B0.5** (beta, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4). Grab a built jar from the
 [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
 a full walkthrough of every setting.
+
+**GitHub-only.** This mod was previously also listed on Modrinth; that
+listing has been removed following an unannounced change to Modrinth's
+Content Rules. GitHub Releases are the only distribution channel going
+forward.
 
 **This mod cannot attack players** (see "Player targeting" below) - that's
 a Modrinth Content Rules requirement, not a design choice, and it's not
@@ -74,15 +79,16 @@ alongside the jars.
 This mod cannot attack players under any configuration -
 the exclusion is hardcoded and checked unconditionally (including in
 blind-swing mode, where blacklist/whitelist would otherwise be bypassed
-entirely). This is required by Modrinth Content Rules 3.3d ("automatic or
-assisted PvP combat" needs a genuine server-side opt-in, which this project
-doesn't implement).
+entirely). This restriction was originally required by Modrinth Content
+Rules 3.3d ("automatic or assisted PvP combat" needs a genuine server-side
+opt-in, which this project doesn't implement) and remains in place in this
+build.
 
 An **uncensored** variant without this restriction was previously
 maintained as a separate `_AP` ("attacks players") build. Past releases
 tagged `_AP` remain available on the [Releases](../../releases) page, but
-that variant is no longer actively maintained or updated - only the
-Modrinth-compliant build above continues to receive new features. Use any
+that variant is no longer actively maintained or updated - only the build
+above continues to receive new features. Use any
 existing `_AP` build only on servers you own or have explicit permission
 on; automated combat against other players is very likely to violate a
 typical server's rules and get flagged by anti-cheat regardless of what
