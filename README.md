@@ -10,14 +10,15 @@ was dropped as of A0.4). Grab a built jar from the
 `./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
 a full walkthrough of every setting.
 
-**GitHub-only.** This mod was previously also listed on Modrinth; that
-listing has been removed following an unannounced change to Modrinth's
-Content Rules. GitHub Releases are the only distribution channel going
-forward.
+**This mod cannot attack players** (see "Player targeting" below) - this was
+done to comply with ModRinth's rules. Even after removal from ModRinth,
+there is no plan to restore the ability to attack players, as this mod
+isn't designed as a PVP aid, but rather a tool to make AFK-sessions at
+mob farms easier and safer to use.
 
-**This mod cannot attack players** (see "Player targeting" below) - that's
-a Modrinth Content Rules requirement, not a design choice, and it's not
-configurable in this build.
+**GitHub-only, not on Modrinth.** A subsequent, silent change to
+Modrinth's rules disqualifies this mod from that platform, so GitHub
+Releases is the only distribution channel going forward.
 
 ## Install
 
