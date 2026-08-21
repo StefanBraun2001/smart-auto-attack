@@ -4,6 +4,13 @@
 
 	"text.autoconfig.smartautoattack.title": "Smart Auto Attack",
 
+	"text.autoconfig.smartautoattack.category.cadence": "Cadence",
+	"text.autoconfig.smartautoattack.category.timing": "Timing",
+	"text.autoconfig.smartautoattack.category.safety": "Safety",
+	"text.autoconfig.smartautoattack.category.targeting": "Targeting",
+	"text.autoconfig.smartautoattack.category.general": "General",
+	"text.autoconfig.smartautoattack.category.autoeat": "Auto-eat",
+
 	"text.autoconfig.smartautoattack.option.attackCadenceMode": "Attack cadence",
 	"text.autoconfig.smartautoattack.option.attackCadenceMode.@Tooltip": "DEFAULT: attack on full cooldown. FIXED_INTERVAL: attack every X ticks/seconds. RANDOM_INTERVAL: attack every random X-Y ticks/seconds.",
 
