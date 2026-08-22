@@ -108,11 +108,23 @@ public class SmartAutoAttackConfigScreen {
 
 		ConfigCategory timing = builder.getOrCreateCategory(category("timing"));
 
+		// Built here (ahead of its own Throttle tab further below) so the Night-only cluster
+		// can hide itself while Throttle is on - Throttle takes priority over Night only and
+		// disregards it entirely (see AutoAttackLogic.effectiveNightOnly).
+		BooleanListEntry throttleEnabled = entryBuilder
+				.startBooleanToggle(option("throttleEnabled"), config.throttleEnabled)
+				.setDefaultValue(defaults.throttleEnabled)
+				.setTooltip(tooltip("throttleEnabled"))
+				.setSaveConsumer(v -> config.throttleEnabled = v)
+				.build();
+		Requirement throttleOff = Requirement.isFalse(throttleEnabled);
+
 		BooleanListEntry nightOnly = entryBuilder
 				.startBooleanToggle(option("nightOnly"), config.nightOnly)
 				.setDefaultValue(defaults.nightOnly)
 				.setTooltip(tooltip("nightOnly"))
 				.setSaveConsumer(v -> config.nightOnly = v)
+				.setDisplayRequirement(throttleOff)
 				.build();
 		timing.addEntry(nightOnly);
 
@@ -121,7 +133,7 @@ public class SmartAutoAttackConfigScreen {
 				.setDefaultValue(defaults.skipNightCheckInDimensionsWithoutCycle)
 				.setTooltip(tooltip("skipNightCheckInDimensionsWithoutCycle"))
 				.setSaveConsumer(v -> config.skipNightCheckInDimensionsWithoutCycle = v)
-				.setDisplayRequirement(Requirement.isTrue(nightOnly))
+				.setDisplayRequirement(Requirement.all(Requirement.isTrue(nightOnly), throttleOff))
 				.build());
 
 		timing.addEntry(entryBuilder
@@ -129,7 +141,7 @@ public class SmartAutoAttackConfigScreen {
 				.setDefaultValue(defaults.freezeDurationDuringDay)
 				.setTooltip(tooltip("freezeDurationDuringDay"))
 				.setSaveConsumer(v -> config.freezeDurationDuringDay = v)
-				.setDisplayRequirement(Requirement.isTrue(nightOnly))
+				.setDisplayRequirement(Requirement.all(Requirement.isTrue(nightOnly), throttleOff))
 				.build());
 
 		timing.addEntry(entryBuilder
@@ -151,6 +163,35 @@ public class SmartAutoAttackConfigScreen {
 				.setDefaultValue(defaults.maxDuration)
 				.setTooltip(tooltip("maxDuration"))
 				.setSaveConsumer(v -> config.maxDuration = v)
+				.build());
+
+		// --- Throttle tab ---
+
+		ConfigCategory throttle = builder.getOrCreateCategory(category("throttle"));
+		throttle.addEntry(throttleEnabled);
+
+		throttle.addEntry(entryBuilder
+				.startStrField(option("throttleAttackDuration"), config.throttleAttackDuration)
+				.setDefaultValue(defaults.throttleAttackDuration)
+				.setTooltip(tooltip("throttleAttackDuration"))
+				.setSaveConsumer(v -> config.throttleAttackDuration = v)
+				.setDisplayRequirement(Requirement.isTrue(throttleEnabled))
+				.build());
+
+		throttle.addEntry(entryBuilder
+				.startStrField(option("throttlePauseDuration"), config.throttlePauseDuration)
+				.setDefaultValue(defaults.throttlePauseDuration)
+				.setTooltip(tooltip("throttlePauseDuration"))
+				.setSaveConsumer(v -> config.throttlePauseDuration = v)
+				.setDisplayRequirement(Requirement.isTrue(throttleEnabled))
+				.build());
+
+		throttle.addEntry(entryBuilder
+				.startBooleanToggle(option("freezeDurationDuringThrottlePause"), config.freezeDurationDuringThrottlePause)
+				.setDefaultValue(defaults.freezeDurationDuringThrottlePause)
+				.setTooltip(tooltip("freezeDurationDuringThrottlePause"))
+				.setSaveConsumer(v -> config.freezeDurationDuringThrottlePause = v)
+				.setDisplayRequirement(Requirement.isTrue(throttleEnabled))
 				.build());
 
 		// --- Safety tab ---

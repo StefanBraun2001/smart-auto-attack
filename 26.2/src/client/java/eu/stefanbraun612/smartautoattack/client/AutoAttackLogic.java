@@ -54,6 +54,18 @@ public class AutoAttackLogic {
 	// message purpose as nightGatePassedLastTick above.
 	private static Boolean creakingOverrideActiveLastTick = null;
 
+	// Throttle: alternates between an "attacking" phase and a "paused" phase for the
+	// configured durations. Mutually exclusive with Night only (only engages while Night
+	// only is effectively off - see tick()), which also naturally disengages it during the
+	// Adjust to Creakings override (that override always forces Night only on).
+	private static boolean throttleAttackingPhase = true;
+	private static long throttlePhaseTicksRemaining = 0;
+	// Whether the throttle mechanism itself was engaged last tick - used to (re)start on a
+	// fresh attack phase the moment it becomes engaged, distinct from throttlePhasePassedLastTick
+	// below (which tracks the attack/pause phase transitions for feedback messages).
+	private static Boolean throttleEngagedLastTick = null;
+	private static Boolean throttlePhasePassedLastTick = null;
+
 	// Remembers the last non-empty main-hand item, for SAME_TYPE/EXACT_MATCH tool rotation.
 	// Needed because once a weapon actually breaks (no durability floor set to catch it
 	// first), the main hand reads as empty/air by the time the rotation search runs - by
@@ -77,6 +89,10 @@ public class AutoAttackLogic {
 		ticksUntilNextAttack = 0; // ready to attack immediately once enabled
 		nightGatePassedLastTick = null;
 		creakingOverrideActiveLastTick = null;
+		throttleAttackingPhase = true;
+		throttlePhaseTicksRemaining = 0;
+		throttleEngagedLastTick = null;
+		throttlePhasePassedLastTick = null;
 		lastKnownMainHandItem = ItemStack.EMPTY;
 		criticalHealthPauseActive = false;
 		criticalHealthPauseTicks = 0;
@@ -114,7 +130,10 @@ public class AutoAttackLogic {
 		// While active, overrides only these three settings for this tick - never written back
 		// to config, so the player's actual preset/settings are untouched once the Creaking
 		// leaves reach.
-		boolean effectiveNightOnly = creakingOverrideActive || config.nightOnly;
+		// Priority order: Creaking override > Throttle > Night only. Throttle disregards Night
+		// only entirely while it's on (see throttleWouldApply below) - the Creaking override
+		// still wins over both, forcing Night only on regardless.
+		boolean effectiveNightOnly = creakingOverrideActive || (config.nightOnly && !config.throttleEnabled);
 		boolean effectiveSkipNightCheckInDimensionsWithoutCycle = creakingOverrideActive || config.skipNightCheckInDimensionsWithoutCycle;
 		boolean effectiveFreezeDurationDuringDay = creakingOverrideActive || config.freezeDurationDuringDay;
 
@@ -142,7 +161,44 @@ public class AutoAttackLogic {
 			nightGatePassedLastTick = null; // stale state - re-evaluate cleanly if night only gets turned back on
 		}
 
-		boolean pausedForDuration = effectiveFreezeDurationDuringDay && effectiveNightOnly && isDaytime && !skipNightGate;
+		// Takes priority over Night only (see effectiveNightOnly above, which already backs
+		// off when Throttle is on) - only the Creaking override still bypasses Throttle.
+		boolean throttleWouldApply = config.throttleEnabled && !creakingOverrideActive;
+		if (throttleWouldApply && (throttleEngagedLastTick == null || !throttleEngagedLastTick)) {
+			// Just became engaged - always (re)start on a fresh attack phase.
+			throttleAttackingPhase = true;
+			throttlePhaseTicksRemaining = DurationParser.parseTicks(config.throttleAttackDuration);
+		}
+		throttleEngagedLastTick = throttleWouldApply;
+
+		boolean throttleGatePasses = true;
+		if (throttleWouldApply) {
+			long throttleAttackTicks = DurationParser.parseTicks(config.throttleAttackDuration);
+			long throttlePauseTicks = DurationParser.parseTicks(config.throttlePauseDuration);
+			// Misconfigured (unparseable/zero duration) - don't gate at all rather than risk
+			// getting stuck permanently paused.
+			if (throttleAttackTicks > 0 && throttlePauseTicks > 0) {
+				if (throttlePhaseTicksRemaining <= 0) {
+					throttleAttackingPhase = !throttleAttackingPhase;
+					throttlePhaseTicksRemaining = throttleAttackingPhase ? throttleAttackTicks : throttlePauseTicks;
+				}
+				throttleGatePasses = throttleAttackingPhase;
+				throttlePhaseTicksRemaining--;
+
+				if (throttlePhasePassedLastTick == null || throttlePhasePassedLastTick != throttleGatePasses) {
+					FeedbackUtil.send(client, config, throttleGatePasses
+							? "Smart Auto Attack: throttle - attacking"
+							: "Smart Auto Attack: throttle - pausing");
+				}
+				throttlePhasePassedLastTick = throttleGatePasses;
+			}
+		} else {
+			throttlePhasePassedLastTick = null; // stale state - re-evaluate cleanly once re-engaged
+		}
+
+		boolean pausedForThrottlePause = throttleWouldApply && !throttleGatePasses && config.freezeDurationDuringThrottlePause;
+		boolean pausedForDuration = (effectiveFreezeDurationDuringDay && effectiveNightOnly && isDaytime && !skipNightGate)
+				|| pausedForThrottlePause;
 		if (!pausedForDuration) {
 			elapsedActiveTicks++;
 		}
@@ -163,7 +219,7 @@ public class AutoAttackLogic {
 			return;
 		}
 
-		if (!nightGatePasses) {
+		if (!nightGatePasses || !throttleGatePasses) {
 			return;
 		}
 

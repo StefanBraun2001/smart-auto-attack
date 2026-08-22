@@ -70,6 +70,38 @@ automatically and always forces the full-charge wait for it, regardless of
   (Pale Gardens are dense with leaves, which would otherwise block a
   line-of-sight check almost constantly).
 
+## Throttle
+
+**Throttle** (default: off) alternates the mod between an attacking phase
+and a paused phase, each lasting the configured **Attack for** / **Then
+pause for** duration (same free-text format as Max duration, e.g. `90m`,
+`1.5h`, `1h30m`). Enabling it always (re)starts on a fresh attack phase.
+An unparseable or zero-length duration on either field disables the gate
+entirely (attacks continuously) rather than risk getting stuck paused
+forever.
+
+**Freeze duration timer during throttle pause** (default: on): the
+max-duration timer above doesn't advance while throttle is in its paused
+phase, so it only counts actual attacking time. Turn it off if you want
+the max-duration timer to keep counting through pauses too.
+
+**Priority order: Adjust to Creakings > Throttle > Night only.**
+
+- Throttle takes priority over Night only. Turning Throttle on disregards
+  Night only completely - not just its own gate, but its two companion
+  settings (Ignore night-only in Nether/End, Freeze duration timer during
+  day) as well - as if Night only were off, regardless of what its toggle
+  is actually set to. To make this obvious rather than silently doing
+  nothing, the whole Night only cluster (the toggle and its two companion
+  settings) **hides itself in the config screen** while Throttle is on.
+  Turning Throttle back off makes it reappear with its previous value
+  intact - nothing gets reset.
+- Adjust to Creakings still overrides both. While your crosshair is
+  actually on a Creaking, the Creaking preset forces Night only on
+  regardless of Throttle or Night only's own toggle - so Throttle is
+  ignored for as long as that override is active, then resumes normally
+  the moment it isn't.
+
 ## Stop conditions (stack - whichever hits first wins)
 
 - **Max hits** (0 = unlimited).

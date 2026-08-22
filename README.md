@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **B0.5** (beta, tested), **MC 26.2 only** (1.20.4 support
+Current build: **B0.5.1** (beta, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4). Grab a built jar from the
 [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
@@ -43,6 +43,11 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
   switches to the ideal Creaking setup (100-tick interval, night only,
   ignoring Nether/End day-night) without touching your saved settings, then
   reverts the moment it isn't. Announces both transitions.
+- **Throttle**: alternates attacking for a configured duration, then pausing
+  for another, with an option to freeze the max-duration timer during the
+  pause. Takes priority over Night only (which hides itself in the config
+  screen while Throttle is on), and is itself ignored while Adjust to
+  Creakings is actively overriding for a detected Creaking.
 - Stop conditions: max hits, max duration, min durability (absolute/%),
   hunger safety stop, health safety stop.
 - Health safety stop can either hard-disable (default) or, with **Eat food
@@ -72,8 +77,7 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
   initiate yourself.
 - Auto-stop sound feedback.
 
-Full feature/config documentation lives in the bundled README shipped
-alongside the jars.
+Full feature/config documentation lives in [docs/GUIDE.md](docs/GUIDE.md).
 
 ## Player targeting
 

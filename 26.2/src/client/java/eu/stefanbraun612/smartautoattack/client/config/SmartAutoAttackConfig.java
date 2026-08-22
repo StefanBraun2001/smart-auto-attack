@@ -50,6 +50,20 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public String maxDuration = ""; // e.g. "90m", "1.5h", "5400s", "1h30m" - empty = unlimited
 
+	// --- Throttle ---
+	// Alternates between an "attacking" phase and a "paused" phase for the configured
+	// durations. Mutually exclusive with Night only (only engages while Night only is
+	// effectively off), which also naturally disengages it during the Adjust to Creakings
+	// override (that override always forces Night only on).
+
+	public boolean throttleEnabled = false;
+
+	public String throttleAttackDuration = "5m"; // same free-text format as maxDuration
+
+	public String throttlePauseDuration = "1m";
+
+	public boolean freezeDurationDuringThrottlePause = true; // pauses the max-duration timer while throttle is paused
+
 	// --- Safety ---
 
 	public int minDurability = 0; // 0 = disabled

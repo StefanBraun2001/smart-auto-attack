@@ -6,6 +6,7 @@
 
 	"text.autoconfig.smartautoattack.category.cadence": "Cadence",
 	"text.autoconfig.smartautoattack.category.timing": "Timing",
+	"text.autoconfig.smartautoattack.category.throttle": "Throttle",
 	"text.autoconfig.smartautoattack.category.safety": "Safety",
 	"text.autoconfig.smartautoattack.category.targeting": "Targeting",
 	"text.autoconfig.smartautoattack.category.general": "General",
@@ -33,7 +34,7 @@
 	"text.autoconfig.smartautoattack.option.alwaysFullyCharge.@Tooltip": "FIXED/RANDOM interval only. On (default): still wait for full cooldown before swinging. Off: attack strictly on interval, risking weaker hits.",
 
 	"text.autoconfig.smartautoattack.option.nightOnly": "Night only",
-	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack at night. Useful for AFK-farming Creakings.",
+	"text.autoconfig.smartautoattack.option.nightOnly.@Tooltip": "Only attack at night. Useful for AFK-farming Creakings. Hidden while Throttle is on.",
 
 	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle": "Ignore night-only in Nether/End",
 	"text.autoconfig.smartautoattack.option.skipNightCheckInDimensionsWithoutCycle.@Tooltip": "On: Night only no longer applies in the Nether/End (no real day-night cycle there anyway).",
@@ -49,6 +50,18 @@
 
 	"text.autoconfig.smartautoattack.option.maxDuration": "Max duration (empty = unlimited)",
 	"text.autoconfig.smartautoattack.option.maxDuration.@Tooltip": "e.g. '90m', '1.5h', '1h30m'. Auto-disable after this long.",
+
+	"text.autoconfig.smartautoattack.option.throttleEnabled": "Throttle",
+	"text.autoconfig.smartautoattack.option.throttleEnabled.@Tooltip": "On: alternates attacking/pausing for the durations below. Takes priority over Night only; see the guide for details.",
+
+	"text.autoconfig.smartautoattack.option.throttleAttackDuration": "Attack for",
+	"text.autoconfig.smartautoattack.option.throttleAttackDuration.@Tooltip": "e.g. '90m', '1.5h', '1h30m'. How long each attacking phase lasts before pausing.",
+
+	"text.autoconfig.smartautoattack.option.throttlePauseDuration": "Then pause for",
+	"text.autoconfig.smartautoattack.option.throttlePauseDuration.@Tooltip": "e.g. '90m', '1.5h', '1h30m'. How long each paused phase lasts before attacking again.",
+
+	"text.autoconfig.smartautoattack.option.freezeDurationDuringThrottlePause": "Freeze duration timer during throttle pause",
+	"text.autoconfig.smartautoattack.option.freezeDurationDuringThrottlePause.@Tooltip": "On (default): pauses the max-duration timer during a throttle pause.",
 
 	"text.autoconfig.smartautoattack.option.minDurability": "Min durability (0 = disabled)",
 	"text.autoconfig.smartautoattack.option.minDurability.@Tooltip": "Stop before durability drops below this absolute value.",
