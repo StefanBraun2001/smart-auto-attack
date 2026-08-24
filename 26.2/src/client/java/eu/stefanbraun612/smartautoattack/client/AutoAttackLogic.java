@@ -4,12 +4,10 @@ import eu.stefanbraun612.smartautoattack.client.config.SmartAutoAttackConfig;
 import me.shedaniel.autoconfig.AutoConfig;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.ClientLevel;
-import net.minecraft.client.resources.sounds.SimpleSoundInstance;
 import net.minecraft.core.component.DataComponents;
 import net.minecraft.core.registries.BuiltInRegistries;
 import net.minecraft.network.protocol.game.ServerboundSetCarriedItemPacket;
 import net.minecraft.resources.Identifier;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.tags.ItemTags;
 import net.minecraft.tags.TagKey;
 import net.minecraft.world.InteractionHand;
@@ -337,15 +335,7 @@ public class AutoAttackLogic {
 		if (!config.playSoundOnAutoStop) {
 			return;
 		}
-		Identifier id = Identifier.tryParse(config.autoStopSound);
-		if (id == null) {
-			return;
-		}
-		SoundEvent sound = BuiltInRegistries.SOUND_EVENT.getValue(id);
-		if (sound == null) {
-			return;
-		}
-		client.getSoundManager().play(SimpleSoundInstance.forUI(sound, 1.0f));
+		SoundUtil.play(client, config.autoStopSound);
 	}
 
 	private static long nextIntervalTicks(SmartAutoAttackConfig config) {
@@ -458,7 +448,9 @@ public class AutoAttackLogic {
 		};
 	}
 
-	private static boolean matchesKeyword(ItemStack stack, String keyword) {
+	// Package-private: also reused by DurabilityWarningLogic (its list-of-keywords match
+	// is just this, looped).
+	static boolean matchesKeyword(ItemStack stack, String keyword) {
 		if (keyword == null || keyword.isBlank()) {
 			return false;
 		}
@@ -466,7 +458,10 @@ public class AutoAttackLogic {
 		return id.toLowerCase(Locale.ROOT).contains(keyword.toLowerCase(Locale.ROOT));
 	}
 
-	private static boolean hasEnoughDurability(ItemStack stack, SmartAutoAttackConfig config) {
+	// Package-private: also reused by DurabilityWarningLogic, which only ever calls this
+	// with a keyword-matched (non-empty) stack, so the useMoreTools-gated empty-stack
+	// branch below never applies to it.
+	static boolean hasEnoughDurability(ItemStack stack, SmartAutoAttackConfig config) {
 		if (stack.isEmpty()) {
 			// Unlike Auto Mine, punching bare-handed is a legitimate (if slow) way to
 			// attack, so leave that untouched when "use more tools" is off - matches

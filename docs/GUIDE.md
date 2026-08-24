@@ -162,6 +162,34 @@ anywhere in the hotbar. Fighting bare-handed is left alone when this
 toggle is off (punching is a legitimate, if slow, attack) - only once it's
 on does an empty main hand count as "not enough".
 
+## Durability warning
+
+An always-on watchdog, separate from everything else on this page - it
+runs whether or not Auto Attack itself is toggled on, since its whole
+point is catching you *manually* using a tool the mod would already
+refuse to touch.
+
+Toggle (default: off) + **Warn for tools**: a list of keywords (e.g.
+`pickaxe`, `axe`), matched the same way as **Use more tools**'s KEYWORD
+mode - substring match against the item ID, case-insensitive. Whenever
+your held item matches one of these keywords *and* its durability is
+already below the **Min durability** / **Min durability %** threshold
+from the Safety tab (the same values the auto-stop/rotation logic uses -
+there's no separate threshold for this), the mod plays **Warning sound**
+(default `minecraft:block.bell.use`, same free-text sound-event-ID format
+as Auto-stop sound):
+
+- **Once**, the moment that item becomes your held item (switching to it,
+  or its durability dropping below the threshold while already held).
+- **Then repeatedly**, capped at twice a second, for as long as you keep
+  holding down attack/mine (left-click) with it.
+
+**Mutually exclusive with Smart Auto Mine's equivalent feature.** If you
+have both mods installed, enabling this while Smart Auto Mine's copy is
+already enabled shows an error on the toggle and blocks the config
+screen's Save & Done until you disable one of them - so the same low-
+durability tool never triggers a double warning from two mods at once.
+
 ## Target filter (blacklist/whitelist)
 
 BLACKLIST (attack anything except the list) or WHITELIST (only attack

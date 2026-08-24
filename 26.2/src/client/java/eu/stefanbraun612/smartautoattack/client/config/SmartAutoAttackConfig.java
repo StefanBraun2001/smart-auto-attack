@@ -104,6 +104,19 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public boolean paranoiaSwitchEnabled = false;
 
+	// --- Durability warning ---
+	// Runs independently of the toggle above - an always-on watchdog for accidentally
+	// hand-using a tool that would already fail the Min durability/% guard, even while
+	// this mod isn't attacking with it. Reuses that same threshold rather than a separate
+	// one. Mutually exclusive with Smart Auto Mine's equivalent feature if installed - see
+	// SmartAutoAttackConfigScreen's error supplier on durabilityWarningEnabled.
+
+	public boolean durabilityWarningEnabled = false;
+
+	public List<String> durabilityWarningKeywords = new ArrayList<>(); // e.g. "pickaxe", "axe" - substring match, same as toolKeyword
+
+	public String durabilityWarningSound = "minecraft:block.bell.use"; // full sound event ID
+
 	// --- Targeting ---
 
 	public enum TargetFilterMode {

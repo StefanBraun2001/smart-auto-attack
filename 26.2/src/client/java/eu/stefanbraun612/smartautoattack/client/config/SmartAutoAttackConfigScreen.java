@@ -3,6 +3,7 @@ package eu.stefanbraun612.smartautoattack.client.config;
 import eu.stefanbraun612.smartautoattack.client.AttackPreset;
 import eu.stefanbraun612.smartautoattack.client.PresetManager;
 import me.shedaniel.autoconfig.AutoConfig;
+import me.shedaniel.autoconfig.ConfigData;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
 import me.shedaniel.clothconfig2.api.ConfigCategory;
@@ -13,6 +14,7 @@ import me.shedaniel.clothconfig2.gui.entries.EnumListEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
 
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -34,6 +36,22 @@ public class SmartAutoAttackConfigScreen {
 
 	private static Component category(String key) {
 		return Component.translatable(PREFIX + "category." + key);
+	}
+
+	// Fully-qualified name of the (optional, separate) Smart Auto Mine mod's config class -
+	// checked via reflection, same no-compile-time-dependency pattern as the Reconnect
+	// signal in SmartAutoAttackClient, so this mod builds and runs fine whether or not
+	// Smart Auto Mine is installed, or whether its version has this feature at all.
+	private static final String SIBLING_MINE_CONFIG_CLASS = "eu.stefanbraun612.smartautomine.client.config.SmartAutoMineConfig";
+
+	private static boolean isSiblingDurabilityWarningEnabled() {
+		try {
+			Class<?> mineConfigClass = Class.forName(SIBLING_MINE_CONFIG_CLASS);
+			Object mineConfig = AutoConfig.getConfigHolder(mineConfigClass.asSubclass(ConfigData.class)).getConfig();
+			return mineConfigClass.getField("durabilityWarningEnabled").getBoolean(mineConfig);
+		} catch (Throwable t) {
+			return false; // Smart Auto Mine not installed, doesn't have this feature yet, or any reflection issue
+		}
 	}
 
 	public static Screen build(Screen parent) {
@@ -307,6 +325,37 @@ public class SmartAutoAttackConfigScreen {
 				.setDisplayRequirement(Requirement.all(
 						Requirement.isTrue(healthSafetyStopEnabled),
 						Requirement.isTrue(eatToRegenerateHealth)))
+				.build());
+
+		// --- Durability warning tab ---
+
+		ConfigCategory durabilityWarning = builder.getOrCreateCategory(category("durabilityWarning"));
+
+		BooleanListEntry durabilityWarningEnabled = entryBuilder
+				.startBooleanToggle(option("durabilityWarningEnabled"), config.durabilityWarningEnabled)
+				.setDefaultValue(defaults.durabilityWarningEnabled)
+				.setTooltip(tooltip("durabilityWarningEnabled"))
+				.setSaveConsumer(v -> config.durabilityWarningEnabled = v)
+				.setErrorSupplier(v -> v && isSiblingDurabilityWarningEnabled()
+						? Optional.of(Component.translatable(PREFIX + "durabilityWarningEnabled.conflict"))
+						: Optional.empty())
+				.build();
+		durabilityWarning.addEntry(durabilityWarningEnabled);
+
+		durabilityWarning.addEntry(entryBuilder
+				.startStrList(option("durabilityWarningKeywords"), config.durabilityWarningKeywords)
+				.setDefaultValue(defaults.durabilityWarningKeywords)
+				.setTooltip(tooltip("durabilityWarningKeywords"))
+				.setSaveConsumer(v -> config.durabilityWarningKeywords = v)
+				.setDisplayRequirement(Requirement.isTrue(durabilityWarningEnabled))
+				.build());
+
+		durabilityWarning.addEntry(entryBuilder
+				.startStrField(option("durabilityWarningSound"), config.durabilityWarningSound)
+				.setDefaultValue(defaults.durabilityWarningSound)
+				.setTooltip(tooltip("durabilityWarningSound"))
+				.setSaveConsumer(v -> config.durabilityWarningSound = v)
+				.setDisplayRequirement(Requirement.isTrue(durabilityWarningEnabled))
 				.build());
 
 		// --- Targeting tab ---

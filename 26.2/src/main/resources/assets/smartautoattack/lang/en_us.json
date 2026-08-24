@@ -8,6 +8,7 @@
 	"text.autoconfig.smartautoattack.category.timing": "Timing",
 	"text.autoconfig.smartautoattack.category.throttle": "Throttle",
 	"text.autoconfig.smartautoattack.category.safety": "Safety",
+	"text.autoconfig.smartautoattack.category.durabilityWarning": "Durability Warning",
 	"text.autoconfig.smartautoattack.category.targeting": "Targeting",
 	"text.autoconfig.smartautoattack.category.general": "General",
 	"text.autoconfig.smartautoattack.category.autoeat": "Auto-eat",
@@ -102,6 +103,16 @@
 
 	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled": "Paranoia switch",
 	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled.@Tooltip": "Off (default). On: don't fully trust Regeneration - still pause-and-eat when triggered even while regenerating, so hunger never goes untended. Needs Eat to regenerate health and Auto-eat both on.",
+
+	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled": "Durability warning",
+	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled.@Tooltip": "On: warns by sound whenever a held item matching a keyword below is already below Min durability/%. Runs even while the mod is off.",
+	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled.conflict": "Also enabled in Smart Auto Mine - disable it there first.",
+
+	"text.autoconfig.smartautoattack.option.durabilityWarningKeywords": "Warn for tools",
+	"text.autoconfig.smartautoattack.option.durabilityWarningKeywords.@Tooltip": "e.g. 'pickaxe', 'axe' - substring match against the item ID, same as Tool keyword.",
+
+	"text.autoconfig.smartautoattack.option.durabilityWarningSound": "Warning sound",
+	"text.autoconfig.smartautoattack.option.durabilityWarningSound.@Tooltip": "Sound event ID, e.g. minecraft:block.bell.use.",
 
 	"text.autoconfig.smartautoattack.option.filterMode": "Target filter mode",
 	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except the list below. WHITELIST: only attack the list below.",
