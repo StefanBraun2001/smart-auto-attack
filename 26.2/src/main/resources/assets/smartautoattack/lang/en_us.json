@@ -11,6 +11,7 @@
 	"text.autoconfig.smartautoattack.category.targeting": "Targeting",
 	"text.autoconfig.smartautoattack.category.general": "General",
 	"text.autoconfig.smartautoattack.category.autoeat": "Auto-eat",
+	"text.autoconfig.smartautoattack.category.presets": "Presets",
 
 	"text.autoconfig.smartautoattack.option.attackCadenceMode": "Attack cadence",
 	"text.autoconfig.smartautoattack.option.attackCadenceMode.@Tooltip": "DEFAULT: attack on full cooldown. FIXED_INTERVAL: attack every X ticks/seconds. RANDOM_INTERVAL: attack every random X-Y ticks/seconds.",
@@ -108,6 +109,9 @@
 	"text.autoconfig.smartautoattack.option.targetList": "Entity type list",
 	"text.autoconfig.smartautoattack.option.targetList.@Tooltip": "e.g. minecraft:player, minecraft:villager.",
 
+	"text.autoconfig.smartautoattack.option.excludeBoatsAndMinecarts": "Exclude boats/minecarts",
+	"text.autoconfig.smartautoattack.option.excludeBoatsAndMinecarts.@Tooltip": "On: never attacks any boat/raft/chest-boat/chest-raft or minecart variant, even if not on the list above.",
+
 	"text.autoconfig.smartautoattack.option.feedbackMode": "Feedback message",
 	"text.autoconfig.smartautoattack.option.feedbackMode.@Tooltip": "How to notify you of toggles/auto-stops.",
 
@@ -136,5 +140,16 @@
 	"text.autoconfig.smartautoattack.option.autoEatAmountMode.@Tooltip": "EAT_ONCE (default): one bite per dip below the threshold. DONT_OVEREAT: keep eating without wasting nutrition past 20. FILL_HUNGER: keep eating to a full bar, regardless of waste.",
 
 	"text.autoconfig.smartautoattack.option.foodSafetyPreset": "Auto-eat food safety",
-	"text.autoconfig.smartautoattack.option.foodSafetyPreset.@Tooltip": "LIGHT (default): blocks golden apple/pufferfish. FOOD_INSPECTOR: also rotten flesh/spider eye/raw chicken/poisonous potato. RAT: no extra blocks."
+	"text.autoconfig.smartautoattack.option.foodSafetyPreset.@Tooltip": "LIGHT (default): blocks golden apple/pufferfish. FOOD_INSPECTOR: also rotten flesh/spider eye/raw chicken/poisonous potato. RAT: no extra blocks.",
+
+	"text.autoconfig.smartautoattack.presets.saved": "Saved presets: %s",
+
+	"text.autoconfig.smartautoattack.option.presetApply": "Apply preset",
+	"text.autoconfig.smartautoattack.option.presetApply.@Tooltip": "Type an exact saved preset name, then Save & Done to apply it. Leave blank to do nothing. Takes effect after any other changes on this screen.",
+
+	"text.autoconfig.smartautoattack.option.presetSaveAs": "Save current settings as",
+	"text.autoconfig.smartautoattack.option.presetSaveAs.@Tooltip": "Type a name and Save & Done to save the current settings (including any other changes on this screen) as a new/overwritten preset. Leave blank to do nothing.",
+
+	"text.autoconfig.smartautoattack.option.presetDelete": "Delete preset",
+	"text.autoconfig.smartautoattack.option.presetDelete.@Tooltip": "Type an exact saved preset name, then Save & Done to delete it. Leave blank to do nothing."
 }

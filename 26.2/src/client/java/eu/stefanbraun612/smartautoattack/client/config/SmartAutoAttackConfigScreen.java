@@ -1,5 +1,7 @@
 package eu.stefanbraun612.smartautoattack.client.config;
 
+import eu.stefanbraun612.smartautoattack.client.AttackPreset;
+import eu.stefanbraun612.smartautoattack.client.PresetManager;
 import me.shedaniel.autoconfig.AutoConfig;
 import me.shedaniel.autoconfig.ConfigHolder;
 import me.shedaniel.clothconfig2.api.ConfigBuilder;
@@ -10,6 +12,8 @@ import me.shedaniel.clothconfig2.gui.entries.BooleanListEntry;
 import me.shedaniel.clothconfig2.gui.entries.EnumListEntry;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.network.chat.Component;
+
+import java.util.Set;
 
 /**
  * Hand-built (not annotation-generated) Cloth Config screen, so that fields can be
@@ -39,8 +43,7 @@ public class SmartAutoAttackConfigScreen {
 
 		ConfigBuilder builder = ConfigBuilder.create()
 				.setParentScreen(parent)
-				.setTitle(Component.translatable(PREFIX + "title"))
-				.setSavingRunnable(holder::save);
+				.setTitle(Component.translatable(PREFIX + "title"));
 		ConfigEntryBuilder entryBuilder = builder.entryBuilder();
 
 		// --- Cadence tab ---
@@ -310,18 +313,27 @@ public class SmartAutoAttackConfigScreen {
 
 		ConfigCategory targeting = builder.getOrCreateCategory(category("targeting"));
 
-		targeting.addEntry(entryBuilder
+		EnumListEntry<SmartAutoAttackConfig.TargetFilterMode> filterMode = entryBuilder
 				.startEnumSelector(option("filterMode"), SmartAutoAttackConfig.TargetFilterMode.class, config.filterMode)
 				.setDefaultValue(defaults.filterMode)
 				.setTooltip(tooltip("filterMode"))
 				.setSaveConsumer(v -> config.filterMode = v)
-				.build());
+				.build();
+		targeting.addEntry(filterMode);
 
 		targeting.addEntry(entryBuilder
 				.startStrList(option("targetList"), config.targetList)
 				.setDefaultValue(defaults.targetList)
 				.setTooltip(tooltip("targetList"))
 				.setSaveConsumer(v -> config.targetList = v)
+				.build());
+
+		targeting.addEntry(entryBuilder
+				.startBooleanToggle(option("excludeBoatsAndMinecarts"), config.excludeBoatsAndMinecarts)
+				.setDefaultValue(defaults.excludeBoatsAndMinecarts)
+				.setTooltip(tooltip("excludeBoatsAndMinecarts"))
+				.setSaveConsumer(v -> config.excludeBoatsAndMinecarts = v)
+				.setDisplayRequirement(Requirement.isValue(filterMode, SmartAutoAttackConfig.TargetFilterMode.BLACKLIST))
 				.build());
 
 		// --- General tab ---
@@ -412,6 +424,63 @@ public class SmartAutoAttackConfigScreen {
 				.setSaveConsumer(v -> config.foodSafetyPreset = v)
 				.setDisplayRequirement(Requirement.isTrue(autoEatEnabled))
 				.build());
+
+		// --- Presets tab ---
+		// No button widgets exist in Cloth Config's declarative entry API, so apply/save/
+		// delete aren't instant like the retired command was - they're captured into these
+		// three ephemeral fields (not real config fields) and only acted on together, once,
+		// in the savingRunnable below, when the screen's own Save & Done is pressed.
+
+		ConfigCategory presetsCategory = builder.getOrCreateCategory(category("presets"));
+		Set<String> presetNames = PresetManager.all().keySet();
+
+		presetsCategory.addEntry(entryBuilder
+				.startTextDescription(Component.translatable(PREFIX + "presets.saved", String.join(", ", presetNames)))
+				.build());
+
+		String[] applyPresetName = {""};
+		presetsCategory.addEntry(entryBuilder
+				.startStringDropdownMenu(option("presetApply"), "")
+				.setDefaultValue("")
+				.setSelections(presetNames)
+				.setSuggestionMode(true)
+				.setTooltip(tooltip("presetApply"))
+				.setSaveConsumer(v -> applyPresetName[0] = v)
+				.build());
+
+		String[] savePresetName = {""};
+		presetsCategory.addEntry(entryBuilder
+				.startStrField(option("presetSaveAs"), "")
+				.setDefaultValue("")
+				.setTooltip(tooltip("presetSaveAs"))
+				.setSaveConsumer(v -> savePresetName[0] = v)
+				.build());
+
+		String[] deletePresetName = {""};
+		presetsCategory.addEntry(entryBuilder
+				.startStringDropdownMenu(option("presetDelete"), "")
+				.setDefaultValue("")
+				.setSelections(presetNames)
+				.setSuggestionMode(true)
+				.setTooltip(tooltip("presetDelete"))
+				.setSaveConsumer(v -> deletePresetName[0] = v)
+				.build());
+
+		builder.setSavingRunnable(() -> {
+			if (!applyPresetName[0].isBlank()) {
+				AttackPreset preset = PresetManager.get(applyPresetName[0]);
+				if (preset != null) {
+					preset.applyTo(config);
+				}
+			}
+			if (!savePresetName[0].isBlank()) {
+				PresetManager.save(savePresetName[0], AttackPreset.fromConfig(config));
+			}
+			if (!deletePresetName[0].isBlank()) {
+				PresetManager.delete(deletePresetName[0]);
+			}
+			holder.save();
+		});
 
 		return builder.build();
 	}

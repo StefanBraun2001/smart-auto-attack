@@ -115,6 +115,12 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public List<String> targetList = new ArrayList<>();
 
+	// Blacklist mode only - excludes every boat/raft/chest-boat/chest-raft variant and
+	// every minecart variant (storage/furnace/TNT/hopper/command-block/spawner) via an
+	// AbstractBoat/AbstractMinecart instanceof check, not a vanilla tag - the vanilla
+	// "boat" tag omits chest boats/rafts entirely, and there's no vanilla minecart tag at all.
+	public boolean excludeBoatsAndMinecarts = false;
+
 	// --- General / feedback ---
 
 	public enum FeedbackMode {

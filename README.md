@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **B0.5.1** (beta, tested), **MC 26.2 only** (1.20.4 support
+Current build: **B0.5.2** (beta, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4). Grab a built jar from the
 [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
@@ -61,16 +61,19 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - "Use more tools": rotates to another hotbar weapon when the current one's
   durability guard trips - by keyword (default `sword`), by weapon
   category (any material), or requiring an exact item match.
-- Entity blacklist/whitelist (players excluded unconditionally - see below).
+- Entity blacklist/whitelist (players excluded unconditionally - see
+  below), with an optional one-click exclusion for every boat/minecart
+  variant under blacklist mode.
 - Auto-eat with a configurable hunger threshold, either from one fixed
   slot or the first eligible food anywhere in the hotbar, and a choice of
   how much to eat per trigger: one bite, as much as won't waste nutrition
   past a full bar, or straight to full regardless of waste.
 - **Presets**: named bundles of duration/durability/tool-rotation/cadence/
-  night-only/auto-eat settings, managed via client-side commands
-  (`/smartautoattack preset list|apply|save|delete`). Ships with
-  `Regular_TP_AEHP`, `Regular_MT_TP_AEHP`, `Creaking_FT_TP_AEHP`, and
-  `Creaking_MT_FT_TP_AEHP` - see the bundled README for what each one sets.
+  night-only/auto-eat settings, managed from their own config tab
+  (apply/save/delete by name, applied on the screen's Save & Done). Ships
+  with `Regular_TP_AEHP`, `Regular_MT_TP_AEHP`, `Creaking_FT_TP_AEHP`, and
+  `Creaking_MT_FT_TP_AEHP` - see [docs/GUIDE.md](docs/GUIDE.md#presets)
+  for what each one sets.
 - Auto-resumes after a reconnect handled by the separate
   [Smart Auto Reconnect](https://github.com/StefanBraun2001/smart-auto-reconnect)
   mod; optional "resume after manual reconnect" toggle for reconnects you

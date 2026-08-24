@@ -18,6 +18,8 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.monster.creaking.Creaking;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.entity.vehicle.boat.AbstractBoat;
+import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.PiercingWeapon;
@@ -583,8 +585,15 @@ public class AutoAttackLogic {
 		Identifier id = BuiltInRegistries.ENTITY_TYPE.getKey(target.getType());
 		boolean listed = config.targetList.contains(id.toString());
 		return switch (config.filterMode) {
-			case BLACKLIST -> !listed;
+			case BLACKLIST -> !listed && !isExcludedVehicle(target, config);
 			case WHITELIST -> listed;
 		};
+	}
+
+	// Instanceof rather than a vanilla tag: the "boat" tag omits chest boats/rafts
+	// entirely, and there's no vanilla minecart tag at all - AbstractBoat/AbstractMinecart
+	// reliably cover every variant of each regardless.
+	private static boolean isExcludedVehicle(Entity target, SmartAutoAttackConfig config) {
+		return config.excludeBoatsAndMinecarts && (target instanceof AbstractBoat || target instanceof AbstractMinecart);
 	}
 }

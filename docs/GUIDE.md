@@ -168,6 +168,14 @@ BLACKLIST (attack anything except the list) or WHITELIST (only attack
 what's listed). Add full namespaced entity IDs via the **+** button, e.g.
 `minecraft:villager`, `minecraft:drowned`, `minecraft:zombified_piglin`.
 
+**Exclude boats/minecarts** (default: off, BLACKLIST mode only - hidden
+under WHITELIST): blocks every boat/raft/chest-boat/chest-raft and every
+minecart variant (storage/furnace/TNT/hopper/command-block/spawner),
+without needing to list each one individually. Uses an actual type check
+rather than a vanilla tag, since vanilla's own "boat" tag omits chest
+boats/rafts and there's no vanilla minecart tag at all - both would
+silently under-cover if this used tags instead.
+
 ## Player targeting
 
 This mod **cannot attack players**, full stop - not configurable, and the
@@ -237,19 +245,40 @@ world finishes loading, regardless of the setting above.
 ## Presets
 
 Named bundles of "technique" settings - never your hotbar slot, keybind,
-or feedback style, since those depend on your own setup. Managed via
-client-side commands (work on any server, no OP needed):
+or feedback style, since those depend on your own setup. Managed from the
+**Presets** tab, not commands - it's the one tab that reads live (a text
+line lists every currently saved preset by name) but only *acts* when you
+press the config screen's own **Save & Done**, since Cloth Config has no
+clickable-button entries to act on immediately:
 
-```
-/smartautoattack preset list
-/smartautoattack preset apply <name>
-/smartautoattack preset save <name>
-/smartautoattack preset delete <name>
-```
+- **Apply preset**: type an exact saved name, then Save & Done. Overwrites
+  whatever you changed elsewhere on the same screen, since it applies
+  last, right before the screen actually saves.
+- **Save current settings as**: type a name, then Save & Done - saves the
+  full current settings (including anything else you changed on the same
+  screen) under that name, creating it or overwriting an existing preset
+  of the same name.
+- **Delete preset**: type an exact saved name, then Save & Done.
 
-Ships with four built-in presets - `Regular_TP_AEHP`, `Regular_MT_TP_AEHP`,
-`Creaking_FT_TP_AEHP`, `Creaking_MT_FT_TP_AEHP` - see the repo README for
-what each one sets.
+All three are independent and optional - leave any of them blank to skip
+that action. If you fill in more than one at once, apply runs first, then
+save, then delete, so e.g. typing the same name into both Apply and Save
+just re-saves that preset's own values back under itself (a no-op).
+
+Ships with four built-in presets:
+
+- **Regular_TP_AEHP**: general-purpose weapon protection (durability floor
+  10 / 5%) plus auto-eat with hunger-safety protection (eat below 7,
+  hard-stop below 3). No night restriction, default cadence, no tool
+  rotation.
+- **Regular_MT_TP_AEHP**: same as above, plus "Use more tools" tool
+  rotation (keyword `sword`).
+- **Creaking_FT_TP_AEHP**: same protection as Regular_TP_AEHP, plus night
+  only with the duration timer frozen during the day, and a fixed
+  100-tick (5s) attack interval - Creakings only regenerate resin at
+  their heart once every 5 seconds, so hitting faster wastes swings.
+- **Creaking_MT_FT_TP_AEHP**: same as Creaking_FT_TP_AEHP, plus "Use more
+  tools" tool rotation.
 
 ## Troubleshooting
 

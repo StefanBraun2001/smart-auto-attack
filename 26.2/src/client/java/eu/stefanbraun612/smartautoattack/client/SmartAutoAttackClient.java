@@ -31,7 +31,6 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 	@Override
 	public void onInitializeClient() {
 		AutoConfig.register(SmartAutoAttackConfig.class, GsonConfigSerializer::new);
-		SmartAutoAttackCommands.register();
 
 		KeyMapping.Category category = KeyMapping.Category.register(
 				Identifier.fromNamespaceAndPath(MOD_ID, "main"));
