@@ -117,6 +117,11 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public String durabilityWarningSound = "minecraft:block.bell.use"; // full sound event ID
 
+	// Separate toggle: checks all 4 armor slots (+ elytra, which occupies the chest slot)
+	// for durability regardless of item type - no keyword list, since "is this a helmet"
+	// isn't a meaningful question the way "is this a pickaxe" is. Shares durabilityWarningSound.
+	public boolean armorDurabilityWarningEnabled = false;
+
 	// --- Targeting ---
 
 	public enum TargetFilterMode {
