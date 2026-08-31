@@ -115,8 +115,9 @@ the max-duration timer to keep counting through pauses too.
   below, since this one has two very different modes of reacting.
 
 **Play sound on auto-stop** (default: on) plays the configured sound
-(default `minecraft:block.bell.use`) whenever the mod stops *itself* -
-never on a manual toggle.
+(default `smartautoattack:auto_stop`, a bundled twin-bell ring - any
+other valid sound event ID, e.g. `minecraft:block.bell.use`, works too)
+whenever the mod stops *itself* - never on a manual toggle.
 
 ## Health safety: stop, or pause and recover
 
@@ -162,57 +163,10 @@ anywhere in the hotbar. Fighting bare-handed is left alone when this
 toggle is off (punching is a legitimate, if slow, attack) - only once it's
 on does an empty main hand count as "not enough".
 
-## Durability warning
-
-An always-on watchdog, separate from everything else on this page - it
-runs whether or not Auto Attack itself is toggled on, since its whole
-point is catching you *manually* using a tool the mod would already
-refuse to touch.
-
-### Tool warning
-
-Toggle (default: off) + **Warn for tools**: a list of keywords (e.g.
-`pickaxe`, `axe`), matched the same way as **Use more tools**'s KEYWORD
-mode - substring match against the item ID, case-insensitive. Checks
-**both your main hand and offhand** independently. Whenever a held item
-matches one of these keywords *and* its durability is already below the
-**Min durability** / **Min durability %** threshold from the Safety tab
-(the same values the auto-stop/rotation logic uses - there's no separate
-threshold for this), the mod plays **Warning sound** (default
-`minecraft:block.bell.use`, same free-text sound-event-ID format as
-Auto-stop sound, and shared with Armor durability warning below):
-
-- **Once**, the moment that item becomes held in that hand (switching to
-  it, or its durability dropping below the threshold while already
-  held).
-- **Then repeatedly**, capped at twice a second, for as long as you keep
-  holding down **either** attack/mine (left-click) **or** use
-  (right-click) with it - so shearing a sheep, tilling dirt, or making
-  farmland with a low-durability tool warns you too, not just breaking
-  blocks or attacking.
-
-### Armor warning
-
-Separate toggle (default: off), **Armor durability warning**: checks all
-four armor slots plus the elytra (which occupies the chest slot) for
-durability - no keyword list, since any equipped armor piece counts
-regardless of type. Uses the same Min durability/% threshold and Warning
-sound as the tool warning above. Plays once the moment a piece drops
-below the threshold or gets equipped already below it, then repeats
-(capped at twice a second) for as long as it stays equipped and low -
-there's no interaction key tied to wearing armor, so unlike the tool
-warning this one isn't gated on attack/use being held.
-
-### Mutual exclusion with Smart Auto Mine
-
-Both toggles above are **independently** mutually exclusive with Smart
-Auto Mine's equivalent features, if you have both mods installed -
-enabling either one here while its counterpart in Smart Auto Mine is
-already enabled shows an error on the toggle and blocks the config
-screen's Save & Done, so the same low-durability item never triggers a
-double warning from two mods at once. You can, however, have (for
-example) the tool warning enabled here and the armor warning enabled in
-Smart Auto Mine at the same time - only matching toggles conflict.
+The standalone "durability warning" watchdog (warns by sound about a
+low-durability tool/armor piece regardless of whether the mod is active)
+now lives exclusively in [Smart Auto Mine](https://github.com/StefanBraun2001/smart-auto-mine)
+- it isn't part of this mod anymore.
 
 ## Target filter (blacklist/whitelist)
 

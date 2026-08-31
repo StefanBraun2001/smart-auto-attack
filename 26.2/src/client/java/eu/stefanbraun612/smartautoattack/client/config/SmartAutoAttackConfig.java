@@ -104,24 +104,6 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public boolean paranoiaSwitchEnabled = false;
 
-	// --- Durability warning ---
-	// Runs independently of the toggle above - an always-on watchdog for accidentally
-	// hand-using a tool that would already fail the Min durability/% guard, even while
-	// this mod isn't attacking with it. Reuses that same threshold rather than a separate
-	// one. Mutually exclusive with Smart Auto Mine's equivalent feature if installed - see
-	// SmartAutoAttackConfigScreen's error supplier on durabilityWarningEnabled.
-
-	public boolean durabilityWarningEnabled = false;
-
-	public List<String> durabilityWarningKeywords = new ArrayList<>(); // e.g. "pickaxe", "axe" - substring match, same as toolKeyword
-
-	public String durabilityWarningSound = "minecraft:block.bell.use"; // full sound event ID
-
-	// Separate toggle: checks all 4 armor slots (+ elytra, which occupies the chest slot)
-	// for durability regardless of item type - no keyword list, since "is this a helmet"
-	// isn't a meaningful question the way "is this a pickaxe" is. Shares durabilityWarningSound.
-	public boolean armorDurabilityWarningEnabled = false;
-
 	// --- Targeting ---
 
 	public enum TargetFilterMode {
@@ -151,7 +133,7 @@ public class SmartAutoAttackConfig implements ConfigData {
 
 	public boolean playSoundOnAutoStop = true;
 
-	public String autoStopSound = "minecraft:block.bell.use"; // full sound event ID
+	public String autoStopSound = "smartautoattack:auto_stop"; // full sound event ID - bundled twin-bell ring, or any other valid sound event ID
 
 	public boolean resumeAfterManualReconnect = false; // scripted reconnects (Smart Auto Reconnect) always resume regardless of this
 

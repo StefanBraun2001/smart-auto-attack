@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **B0.5.4** (beta, tested), **MC 26.2 only** (1.20.4 support
+Current build: **B0.5.5** (beta, tested), **MC 26.2 only** (1.20.4 support
 was dropped as of A0.4). Grab a built jar from the
 [Releases](../../releases) page, or build from source with
 `./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
@@ -61,16 +61,6 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
 - "Use more tools": rotates to another hotbar weapon when the current one's
   durability guard trips - by keyword (default `sword`), by weapon
   category (any material), or requiring an exact item match.
-- **Durability warning**: two independent always-on watchdogs (work even
-  while the mod itself is off). Tool warning plays a sound when a
-  main-hand *or offhand* item matching a user-configured keyword (e.g.
-  `pickaxe`, `axe`) drops below the same Min durability/% threshold above
-  - once on equip, then looping (max twice a second) while
-  attacking/mining *or* right-click-using it (shearing, tilling, etc.).
-  Armor warning checks all 4 armor slots + elytra for durability, no
-  keyword needed. Each toggle is independently mutually exclusive with
-  its counterpart in [Smart Auto Mine](https://github.com/StefanBraun2001/smart-auto-mine)
-  if both are installed.
 - Entity blacklist/whitelist (players excluded unconditionally - see
   below), with an optional one-click exclusion for every boat/minecart
   variant under blacklist mode.
@@ -88,7 +78,12 @@ Needs Fabric Loader + **Fabric API**. Also install **Cloth Config API**
   [Smart Auto Reconnect](https://github.com/StefanBraun2001/smart-auto-reconnect)
   mod; optional "resume after manual reconnect" toggle for reconnects you
   initiate yourself.
-- Auto-stop sound feedback.
+- Auto-stop sound feedback, defaulting to a bundled custom twin-bell ring
+  (any other sound event ID works too).
+- Durability warning (main-hand/offhand + armor) has moved to
+  [Smart Auto Mine](https://github.com/StefanBraun2001/smart-auto-mine) -
+  it's no longer part of this mod, to avoid duplicating the same
+  always-on watchdog across both.
 
 Full feature/config documentation lives in [docs/GUIDE.md](docs/GUIDE.md).
 

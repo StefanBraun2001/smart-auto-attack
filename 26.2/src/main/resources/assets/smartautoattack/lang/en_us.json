@@ -8,7 +8,6 @@
 	"text.autoconfig.smartautoattack.category.timing": "Timing",
 	"text.autoconfig.smartautoattack.category.throttle": "Throttle",
 	"text.autoconfig.smartautoattack.category.safety": "Safety",
-	"text.autoconfig.smartautoattack.category.durabilityWarning": "Durability Warning",
 	"text.autoconfig.smartautoattack.category.targeting": "Targeting",
 	"text.autoconfig.smartautoattack.category.general": "General",
 	"text.autoconfig.smartautoattack.category.autoeat": "Auto-eat",
@@ -104,20 +103,6 @@
 	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled": "Paranoia switch",
 	"text.autoconfig.smartautoattack.option.paranoiaSwitchEnabled.@Tooltip": "Off (default). On: don't fully trust Regeneration - still pause-and-eat when triggered even while regenerating, so hunger never goes untended. Needs Eat to regenerate health and Auto-eat both on.",
 
-	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled": "Durability warning",
-	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled.@Tooltip": "On: warns by sound when a main-hand or offhand item matching a keyword below is already below Min durability/% - once on equip, then looping while attacking/using it. Runs even while the mod is off.",
-	"text.autoconfig.smartautoattack.option.durabilityWarningEnabled.conflict": "Also enabled in Smart Auto Mine - disable it there first.",
-
-	"text.autoconfig.smartautoattack.option.durabilityWarningKeywords": "Warn for tools",
-	"text.autoconfig.smartautoattack.option.durabilityWarningKeywords.@Tooltip": "e.g. 'pickaxe', 'axe' - substring match against the item ID, same as Tool keyword.",
-
-	"text.autoconfig.smartautoattack.option.durabilityWarningSound": "Warning sound",
-	"text.autoconfig.smartautoattack.option.durabilityWarningSound.@Tooltip": "Sound event ID, e.g. minecraft:block.bell.use. Shared with Armor durability warning below.",
-
-	"text.autoconfig.smartautoattack.option.armorDurabilityWarningEnabled": "Armor durability warning",
-	"text.autoconfig.smartautoattack.option.armorDurabilityWarningEnabled.@Tooltip": "On: warns by sound whenever any equipped armor piece (or elytra) is below Min durability/%, no keyword list needed. Runs even while the mod is off.",
-	"text.autoconfig.smartautoattack.option.armorDurabilityWarningEnabled.conflict": "Also enabled in Smart Auto Mine - disable it there first.",
-
 	"text.autoconfig.smartautoattack.option.filterMode": "Target filter mode",
 	"text.autoconfig.smartautoattack.option.filterMode.@Tooltip": "BLACKLIST: attack anything except the list below. WHITELIST: only attack the list below.",
 
@@ -134,7 +119,7 @@
 	"text.autoconfig.smartautoattack.option.playSoundOnAutoStop.@Tooltip": "On (default): play a sound whenever the mod auto-stops itself.",
 
 	"text.autoconfig.smartautoattack.option.autoStopSound": "Auto-stop sound",
-	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Sound event ID, e.g. minecraft:block.bell.use.",
+	"text.autoconfig.smartautoattack.option.autoStopSound.@Tooltip": "Sound event ID. Default is a bundled twin-bell ring (smartautoattack:auto_stop); any other valid sound event ID (e.g. minecraft:block.bell.use) works too.",
 
 	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect": "Resume after manual reconnect",
 	"text.autoconfig.smartautoattack.option.resumeAfterManualReconnect.@Tooltip": "Off (default): a manual reconnect turns the mod off. On: it resumes automatically.",

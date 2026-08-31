@@ -30,6 +30,7 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 
 	@Override
 	public void onInitializeClient() {
+		SmartAutoAttackSounds.init();
 		AutoConfig.register(SmartAutoAttackConfig.class, GsonConfigSerializer::new);
 
 		KeyMapping.Category category = KeyMapping.Category.register(
@@ -64,10 +65,6 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 			while (toggleKey.consumeClick()) {
 				setEnabled(!enabled, client);
 			}
-			// Independent of `enabled` and the settle window below - a purely local sound
-			// cue, not attack/eat packets, so there's nothing unsafe about it running
-			// against a still-loading world.
-			DurabilityWarningLogic.tick(client);
 			if (joinSettleTicksLeft > 0) {
 				joinSettleTicksLeft--;
 				return;
