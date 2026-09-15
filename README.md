@@ -4,11 +4,13 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **B0.5.5** (beta, tested), **MC 26.2 only** (1.20.4 support
-was dropped as of A0.4). Grab a built jar from the
-[Releases](../../releases) page, or build from source with
-`./gradlew build` inside `26.2/`. See [docs/GUIDE.md](docs/GUIDE.md) for
-a full walkthrough of every setting.
+Current build: **B0.5.5** (beta, tested), **MC 26.3 only** (26.2 support
+was dropped once 26.3 released; 1.20.4 support was dropped earlier, as of
+A0.4). Older 26.2 builds remain available on the
+[Releases](../../releases) page for anyone still on that version. Grab a
+built jar from the [Releases](../../releases) page, or build from source
+with `./gradlew build` inside `26.3/`. See [docs/GUIDE.md](docs/GUIDE.md)
+for a full walkthrough of every setting.
 
 **This mod cannot attack players** (see "Player targeting" below) - this was
 done to comply with ModRinth's rules. Even after removal from ModRinth,
@@ -110,11 +112,11 @@ the mod is called.
 ## Building from source
 
 ```
-cd 26.2
+cd 26.3
 ./gradlew build
 ```
 
-Built jar lands in `26.2/build/libs/`. Needs JDK 25.
+Built jar lands in `26.3/build/libs/`. Needs JDK 25.
 
 ## Credits
 

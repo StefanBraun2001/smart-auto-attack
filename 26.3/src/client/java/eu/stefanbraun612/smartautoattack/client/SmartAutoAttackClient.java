@@ -11,7 +11,6 @@ import net.fabricmc.fabric.api.client.networking.v1.ClientPlayConnectionEvents;
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
 import net.minecraft.resources.Identifier;
-import org.lwjgl.glfw.GLFW;
 
 public class SmartAutoAttackClient implements ClientModInitializer {
 	public static final String MOD_ID = "smartautoattack";
@@ -38,8 +37,8 @@ public class SmartAutoAttackClient implements ClientModInitializer {
 
 		toggleKey = KeyMappingHelper.registerKeyMapping(new KeyMapping(
 				"key.smartautoattack.toggle",
-				InputConstants.Type.KEYSYM,
-				GLFW.GLFW_KEY_J,
+				InputConstants.Type.KEYBOARD,
+				InputConstants.KEY_J,
 				category
 		));
 

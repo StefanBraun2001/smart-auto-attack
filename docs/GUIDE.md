@@ -1,14 +1,15 @@
 # Smart Auto Attack - Detailed Guide
 
-Client-side Fabric mod for MC 26.2. Auto-attacks whatever's under your
-crosshair, with conditions on top so it doesn't overflow farms, break your
-sword, or hit things you didn't mean to.
+Client-side Fabric mod for MC 26.3 (older 26.2 builds remain on the
+Releases page for anyone still on that version). Auto-attacks whatever's
+under your crosshair, with conditions on top so it doesn't overflow farms,
+break your sword, or hit things you didn't mean to.
 
 **This mod cannot attack players at all** - see "Player targeting" below.
 
 ## Installation
 
-1. Install Fabric Loader for MC 26.2.
+1. Install Fabric Loader for MC 26.3.
 2. Install **Fabric API**.
 3. Install **Cloth Config API** (required - the config screen depends on it).
 4. Optionally install **Mod Menu** for an in-game config entry point;

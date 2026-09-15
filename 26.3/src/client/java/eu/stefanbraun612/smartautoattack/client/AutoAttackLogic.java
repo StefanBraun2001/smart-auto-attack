@@ -21,6 +21,7 @@ import net.minecraft.world.entity.vehicle.minecart.AbstractMinecart;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.component.PiercingWeapon;
+import net.minecraft.world.item.component.SwingAnimation;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
@@ -306,14 +307,18 @@ public class AutoAttackLogic {
 	// spear sends the wrong packet, so nothing lands even though the arm swings.
 	private static void performAttack(Minecraft client, Player player, SmartAutoAttackConfig config, Entity target,
 			PiercingWeapon piercingWeapon) {
+		// swing() and piercingAttack() both gained a SwingAnimation parameter in 26.3 -
+		// vanilla itself always sources it from the attacking item's own data component
+		// (ItemStack.getAttackAnimation()), same as done here.
+		SwingAnimation swingAnimation = player.getMainHandItem().getAttackAnimation();
 		if (piercingWeapon != null) {
-			client.gameMode.piercingAttack(piercingWeapon);
-			player.swing(InteractionHand.MAIN_HAND);
+			client.gameMode.piercingAttack(swingAnimation, piercingWeapon);
+			player.swing(InteractionHand.MAIN_HAND, swingAnimation, false);
 		} else {
 			if (target != null) {
 				client.gameMode.attack(player, target);
 			}
-			player.swing(InteractionHand.MAIN_HAND);
+			player.swing(InteractionHand.MAIN_HAND, swingAnimation, false);
 		}
 
 		hitCount++;
