@@ -4,7 +4,7 @@ Client-side Fabric mod. Auto-attacks whatever's under your crosshair, with
 conditions on top so it doesn't overflow farms, break your sword, or hit
 things you didn't mean to.
 
-Current build: **B0.5.5** (beta, tested), **MC 26.3 only** (26.2 support
+Current build: **B0.5.6** (beta), **MC 26.3 only** (26.2 support
 was dropped once 26.3 released; 1.20.4 support was dropped earlier, as of
 A0.4). Older 26.2 builds remain available on the
 [Releases](../../releases) page for anyone still on that version. Grab a

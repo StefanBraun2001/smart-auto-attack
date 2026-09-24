@@ -340,7 +340,7 @@ public class AutoAttackLogic {
 		if (!config.playSoundOnAutoStop) {
 			return;
 		}
-		SoundUtil.play(client, config.autoStopSound);
+		SoundUtil.play(client, config.autoStopSound, 0.7f);
 	}
 
 	private static long nextIntervalTicks(SmartAutoAttackConfig config) {
